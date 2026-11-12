@@ -531,6 +531,11 @@ async def handle_config():
     # a reload (or a hard refresh) should not silently change which model the
     # next Generate will use. Only honoured if it is still on disk.
     names = [m["name"] for m in unet_info]
+    # A fresh clone has an empty registry: DEFAULT_UNET is "" and the app would open with no
+    # model selected. Fall back to the first unet that its ComfyUI folder actually has.
+    if default_unet not in names and names:
+        default_unet = names[0]
+        preset = shared.get_preset(default_unet)
     last_unet = _load_ui_state().get("last_unet", "")
     if last_unet and last_unet in names:
         default_unet = last_unet

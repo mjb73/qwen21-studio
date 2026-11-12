@@ -79,7 +79,9 @@ SCHEDULERS = _CFG["schedulers"]
 UNET_MODELS = _CFG["unet_models"]
 # First entry of the configured list is this app's purpose-built model; the
 # UI's active sub-tab and every "no model supplied" fallback resolve to it.
-DEFAULT_UNET = UNET_MODELS[0]
+# A fresh clone has an empty registry (models are added in the Models tab), so
+# this must tolerate an empty list rather than crash at import.
+DEFAULT_UNET = UNET_MODELS[0] if UNET_MODELS else ""
 CLIP_MODELS = _CFG["clip_models"]
 CLIP_TYPES = _CFG["clip_types"]
 VAE_MODELS = _CFG["vae_models"]
@@ -701,8 +703,15 @@ def get_preset(unet_name):
         return {"loras": loras}
 
     result = dict(p)
-    result["lora1_name"] = p["lora1_name"] if p["lora1_name"] in loras else (loras[1] if len(loras) > 1 else "none")
-    result["lora2_name"] = p["lora2_name"] if p["lora2_name"] in loras else "none"
+    # lora1_name/lora2_name are optional in a hand-written or stripped preset — a fresh clone's
+    # config.example.json has no personal LoRAs in it at all — so read them defensively instead
+    # of keying straight into the preset.
+    want1 = p.get("lora1_name", "none")
+    want2 = p.get("lora2_name", "none")
+    result["lora1_name"] = want1 if want1 in loras else (loras[1] if len(loras) > 1 else "none")
+    result["lora2_name"] = want2 if want2 in loras else "none"
+    result.setdefault("lora1_strength", 0.0)
+    result.setdefault("lora2_strength", 0.0)
     result["loras"] = loras
     return result
 
