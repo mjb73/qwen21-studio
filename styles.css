@@ -1,0 +1,1983 @@
+/* ============================================
+   ComfyUI Ernie Generator — Multi-Theme Dark Modes
+   ============================================ */
+
+.hidden { display: none !important; }
+
+/* --- Structural variables (global) --- */
+:root {
+  --radius: 12px;
+}
+
+/* --- Cyberpunk Neon (default) --- */
+[data-theme="cyberpunk"],
+:root {
+  --font-display: "Chakra Petch", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --bg-0: #080c14;
+  --bg-1: #0f1a28;
+  --bg-card: rgba(13, 22, 36, 0.92);
+  --bg-input: #0a111c;
+  --text: #eaf2ff;
+  --muted: #6b7f9f;
+  --accent: #8df574;
+  --accent-hover: #76e9ff;
+  --pink: #f36edc;
+  --border: #234065;
+  --border-focus: #76e9ff;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --glow-1: rgba(141, 245, 116, 0.06);
+  --glow-2: rgba(118, 233, 255, 0.05);
+  --cursor-glow: rgba(141, 245, 116, 0.06);
+  --modal-bg: rgba(8, 12, 20, 0.95);
+  --row-alt: rgba(0, 0, 0, 0.15);
+}
+
+
+/* --- PhotoCraft (the host panel's palette; used when embedded by PhotoCraft AI) --- */
+/* Sampled from the editor itself: chrome and dock bodies #535353, tab strips #4a4a4a, input wells
+   #454545 on #343434 seams, canvas #282828, one blue accent #378ef0. Flat grey, 1 px seams, square
+   corners, and the editor's density — no glow and no translucency, so the embedded engine reads as
+   a pane of the same application. */
+[data-theme="photocraft"] {
+  --font-display: "Inter", "Noto Sans", "DejaVu Sans", system-ui, sans-serif;
+  --font-body: "Inter", "Noto Sans", "DejaVu Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "DejaVu Sans Mono", monospace;
+  --bg-0: #282828;
+  --bg-1: #4a4a4a;
+  --bg-card: #535353;
+  --bg-input: #454545;
+  --text: #eeeeee;
+  --muted: #a0a0a0;
+  --accent: #378ef0;
+  --accent-hover: #5aa4f6;
+  --pink: #e06c6c;
+  --border: #343434;
+  --border-focus: #378ef0;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --glow-1: rgba(0, 0, 0, 0);
+  --glow-2: rgba(0, 0, 0, 0);
+  --cursor-glow: rgba(0, 0, 0, 0);
+  --modal-bg: rgba(40, 40, 40, 0.98);
+  --row-alt: rgba(255, 255, 255, 0.04);
+  --radius: 3px;
+  --radius-sm: 3px;
+  /* the whole UI is rem-based off this: the editor's density, not the studio's 27 px showcase */
+  font-size: 13px;
+}
+[data-theme="photocraft"] body { background: var(--bg-0); font-size: 12px; }
+[data-theme="photocraft"] body::before { background: none; }
+[data-theme="photocraft"] .bg-grid { display: none; }
+/* embedded in the PhotoCraft AI panel: the host owns the title bar, the tabs and the theme choice,
+   so the engine shows only its controls */
+body.embedded .topbar { display: none; }
+body.embedded .scanline, body.embedded .cursor-glow { display: none; }
+
+/* --- Obsidian Ember --- */
+[data-theme="ember"] {
+  --font-display: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --bg-0: #0c0c0c;
+  --bg-1: #181818;
+  --bg-card: rgba(24, 24, 24, 0.94);
+  --bg-input: #121212;
+  --text: #f0ece6;
+  --muted: #8a7f72;
+  --accent: #e8a838;
+  --accent-hover: #ff9e5e;
+  --pink: #e86a6a;
+  --border: #2d2d2d;
+  --border-focus: #ff9e5e;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --glow-1: rgba(232, 168, 56, 0.06);
+  --glow-2: rgba(255, 158, 94, 0.05);
+  --cursor-glow: rgba(232, 168, 56, 0.06);
+  --modal-bg: rgba(12, 12, 12, 0.95);
+  --row-alt: rgba(0, 0, 0, 0.15);
+}
+
+/* --- Midnight Aurora --- */
+[data-theme="aurora"] {
+  --font-display: "Quicksand", sans-serif;
+  --font-body: "Nunito", sans-serif;
+  --font-mono: "Space Mono", monospace;
+  --bg-0: #0d081a;
+  --bg-1: #1a122e;
+  --bg-card: rgba(26, 18, 46, 0.94);
+  --bg-input: #140d24;
+  --text: #f0e8ff;
+  --muted: #8a7fa0;
+  --accent: #c084fc;
+  --accent-hover: #5ce1c3;
+  --pink: #f472b6;
+  --border: #2d1e4d;
+  --border-focus: #c084fc;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --glow-1: rgba(192, 132, 252, 0.06);
+  --glow-2: rgba(92, 225, 195, 0.05);
+  --cursor-glow: rgba(192, 132, 252, 0.06);
+  --modal-bg: rgba(13, 8, 26, 0.95);
+  --row-alt: rgba(0, 0, 0, 0.15);
+}
+
+/* --- Dark Inferno --- */
+[data-theme="inferno"] {
+  --font-display: "Kanit", sans-serif;
+  --font-body: "Barlow", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --bg-0: #0a0505;
+  --bg-1: #1a0f0f;
+  --bg-card: rgba(26, 15, 15, 0.94);
+  --bg-input: #120a0a;
+  --text: #f5e8e0;
+  --muted: #7a6b6b;
+  --accent: #ff6b35;
+  --accent-hover: #ffaa33;
+  --pink: #e63946;
+  --border: #3d1f1f;
+  --border-focus: #ff6b35;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --glow-1: rgba(255, 107, 53, 0.06);
+  --glow-2: rgba(255, 170, 51, 0.05);
+  --cursor-glow: rgba(255, 107, 53, 0.06);
+  --modal-bg: rgba(10, 5, 5, 0.95);
+  --row-alt: rgba(0, 0, 0, 0.15);
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 27px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-0);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 20%, var(--glow-1) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, var(--glow-2) 0%, transparent 40%);
+}
+
+/* --- Background Effects --- */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 33px 33px;
+  pointer-events: none;
+}
+
+.scanline {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 3px
+  );
+  pointer-events: none;
+}
+
+.cursor-glow {
+  position: fixed;
+  width: 338px;
+  height: 338px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cursor-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* --- Topbar --- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 18px 27px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(9px);
+  gap: 22px;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+}
+
+.brand-mark { color: var(--accent); }
+.brand-name { color: var(--text); }
+
+.model-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--muted);
+  background: var(--bg-1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* Theme selector */
+.theme-select {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--text);
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 8px;
+  outline: none;
+  cursor: pointer;
+}
+.theme-select:focus {
+  border-color: var(--border-focus);
+}
+
+/* --- Container --- */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 18px 36px 32px;
+  /* Column layout so the Generate dock can be pushed to the bottom of the pane: the button then
+     sits at the foot of the column instead of leaving a void under it. Nothing is allowed to
+     shrink — a squashed prompt is worse than a scrollbar. */
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--topbar-h, 0px));
+}
+.container > * { flex: 0 0 auto; }
+#generateDock { margin-top: auto; position: sticky; bottom: 0; z-index: 90;
+  background: var(--bg-0); padding-top: 2px; }
+
+/* --- Hero --- */
+.hero {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 7px;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--pink), var(--accent-hover));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.lede {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--muted);
+  letter-spacing: 0.2px;
+}
+
+/* --- Tab Bar --- */
+/* Inside #stickyHeader, so it needs no sticky positioning of its own.
+   z-index 95 keeps the header group above .bg-grid (z 0) and below .topbar (z 100). */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.tab-btn {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  padding: 16px 29px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn:hover { color: var(--text); }
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* --- Tab Panels --- */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Output panel: natural height, no forced viewport fill */
+#outputPanel.active {
+  display: block;
+}
+
+#outputPanel.active > .glass-panel {
+  display: block;
+}
+
+/* --- Sub Tabs --- */
+.sub-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin: 3px 0;
+}
+
+.sub-tab-btn {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  padding: 16px 29px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.sub-tab-btn:hover { color: var(--text); }
+.sub-tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.sub-panel { display: none; }
+.sub-panel.active { display: block; }
+
+/* --- Glass Panels --- */
+.glass-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 27px;
+  margin-bottom: 27px;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(118, 233, 255, 0.2);
+  box-shadow: 0 0 15px rgba(118, 233, 255, 0.03);
+}
+
+[data-theme="ember"] .glass-panel:hover {
+  border-color: rgba(255, 158, 94, 0.2);
+  box-shadow: 0 0 15px rgba(255, 158, 94, 0.03);
+}
+
+[data-theme="aurora"] .glass-panel:hover {
+  border-color: rgba(192, 132, 252, 0.2);
+  box-shadow: 0 0 15px rgba(192, 132, 252, 0.03);
+}
+
+[data-theme="inferno"] .glass-panel:hover {
+  border-color: rgba(255, 107, 53, 0.2);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.03);
+}
+
+/* --- Section Headers --- */
+.section-header {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 11px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.section-header::before {
+  content: "";
+  display: inline-block;
+  width: 4.4px;
+  height: 16px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-hover));
+  border-radius: 2px;
+}
+
+[data-theme="aurora"] .section-header,
+[data-theme="inferno"] .section-header {
+  color: #ffffff;
+}
+
+/* --- Form Rows --- */
+.form-row {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 25px;
+}
+
+.form-row.one > .field { flex: 1 1 100%; min-width: 150px; }
+.form-row.two > .field { flex: 1 1 45%; min-width: 180px; }
+.form-row.three > .field { flex: 1 1 30%; min-width: 150px; }
+.form-row > .field.stretch { flex: 2 1 225px; }
+
+/* Chain defaults two-column layout */
+.chain-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.chain-col {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.chain-col .section-header {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+}
+.chain-col .field {
+  margin-bottom: 10px;
+}
+
+/* --- Phase 1 / Phase 2 column overrides: compact fit --- */
+.chain-col .form-row {
+  display: flex;
+  gap: 8px;
+}
+.chain-col .form-row > .field {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+.chain-col .field input,
+.chain-col .field select {
+  font-size: 0.75rem;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.chain-col .field input[type="range"] {
+  height: 6px;
+}
+.chain-col .field input[type="range"]::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+}
+.chain-col .field label {
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+/* --- Prompt-tab chain columns: stacked vertical, compact fit --- */
+#promptPanel .chain-columns {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+#promptPanel .chain-col {
+  padding: 12px;
+  gap: 6px;
+}
+#promptPanel .chain-col .section-header {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+}
+#promptPanel .chain-col .field {
+  margin-bottom: 6px;
+}
+#promptPanel .chain-col .field label {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+#promptPanel .chain-col .form-row {
+  gap: 8px;
+}
+#promptPanel .chain-col .field input,
+#promptPanel .chain-col .field select {
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+#promptPanel .chain-col .field input[type="range"] {
+  height: 5px;
+}
+#promptPanel .chain-col .field input[type="range"]::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- Skeleton row: tight layout --- */
+#skeletonRow {
+  align-items: flex-start;
+  gap: 2px;
+  margin-bottom: 3px;
+}
+
+#skeletonRow > .thumbnail-wrap {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  max-width: 140px;
+  min-height: 0;
+}
+
+/* --- Fields --- */
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2px;
+}
+
+.field label {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: var(--muted);
+  margin-bottom: 7px;
+  padding-left: 2px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.field textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+/* Prompt textarea: ensure minimum height and modern auto-sizing */
+.field textarea#positivePrompt {
+  min-height: 180px;
+  field-sizing: content;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(118, 233, 255, 0.1);
+}
+
+[data-theme="ember"] .field input:focus,
+[data-theme="ember"] .field select:focus,
+[data-theme="ember"] .field textarea:focus {
+  box-shadow: 0 0 0 2px rgba(255, 158, 94, 0.1);
+}
+
+[data-theme="aurora"] .field input:focus,
+[data-theme="aurora"] .field select:focus,
+[data-theme="aurora"] .field textarea:focus {
+  box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.1);
+}
+
+[data-theme="inferno"] .field input:focus,
+[data-theme="inferno"] .field select:focus,
+[data-theme="inferno"] .field textarea:focus {
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+}
+
+.field input[readonly] {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.field input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--bg-1);
+  outline: none;
+  padding: 0;
+}
+
+.field input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 3px solid var(--bg-0);
+  box-shadow: 0 0 16px rgba(118, 233, 255, 0.5);
+}
+
+[data-theme="ember"] .field input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 0 0 16px rgba(255, 158, 94, 0.5);
+}
+
+[data-theme="aurora"] .field input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 0 0 16px rgba(92, 225, 195, 0.5);
+}
+
+[data-theme="inferno"] .field input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 0 0 16px rgba(255, 107, 53, 0.5);
+}
+
+/* --- Thumbnail --- */
+.thumbnail-wrap {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  max-height: 160px;
+  max-width: 140px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.thumbnail-wrap img {
+  max-height: 140px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+/* --- Buttons --- */
+.btn-row {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+/* Generate bar + tab bar pin together as one header under the sticky topbar.
+   The wrapper is the sticky element so the two never overlap each other.
+   --topbar-h is kept in sync by syncTopbarHeight() in main.js. */
+#stickyHeader {
+  position: sticky;
+  top: var(--topbar-h, 72px);
+  z-index: 95;
+  background: var(--bg-0);
+  /* The gap under the tabs lives INSIDE this box (padding), not in a ::after strip painted
+     below it: a strip at top:100% covers the first few pixels of whatever follows, which is how
+     the Status row ended up half hidden under the tab heading once the column scrolled a little. */
+  padding-bottom: 4px;
+  box-shadow: 0 10px 18px -12px rgba(0, 0, 0, 0.85);
+}
+
+/* Inside #stickyHeader the wrapper owns the spacing. */
+#stickyHeader .tab-bar {
+  margin-bottom: 0;
+}
+
+/* Nothing may hide under a pinned header when something focuses or scroll-into-view lands on it. */
+html { scroll-padding-top: calc(var(--topbar-h, 0px) + 40px); }
+
+/* Generate bar (bottom of the column now: below the prompt and the two folded sections it acts on) */
+#generateBar {
+  margin-top: 8px;
+  margin-bottom: 0;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  backdrop-filter: blur(9px);
+}
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border-radius: 14px;
+  padding: 14px 25px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  background: var(--bg-1);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, rgba(141, 245, 116, 0.15), rgba(118, 233, 255, 0.15));
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn.primary:hover {
+  background: linear-gradient(135deg, rgba(141, 245, 116, 0.25), rgba(118, 233, 255, 0.25));
+  box-shadow: 0 0 12px rgba(141, 245, 116, 0.15), 0 0 24px rgba(141, 245, 116, 0.05);
+}
+
+[data-theme="ember"] .btn.primary {
+  background: linear-gradient(135deg, rgba(232, 168, 56, 0.15), rgba(255, 158, 94, 0.15));
+}
+
+[data-theme="ember"] .btn.primary:hover {
+  background: linear-gradient(135deg, rgba(232, 168, 56, 0.25), rgba(255, 158, 94, 0.25));
+  box-shadow: 0 0 12px rgba(232, 168, 56, 0.15), 0 0 24px rgba(232, 168, 56, 0.05);
+}
+
+[data-theme="aurora"] .btn.primary {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.15), rgba(92, 225, 195, 0.15));
+}
+
+[data-theme="aurora"] .btn.primary:hover {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.25), rgba(92, 225, 195, 0.25));
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.15), 0 0 24px rgba(192, 132, 252, 0.05);
+}
+
+[data-theme="inferno"] .btn.primary {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 170, 51, 0.15));
+}
+
+[data-theme="inferno"] .btn.primary:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.25), rgba(255, 170, 51, 0.25));
+  box-shadow: 0 0 12px rgba(255, 107, 53, 0.15), 0 0 24px rgba(255, 107, 53, 0.05);
+}
+
+.btn.secondary {
+  background: var(--bg-1);
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.btn.secondary:hover {
+  border-color: var(--accent-hover);
+  color: var(--accent-hover);
+  box-shadow: 0 0 9px rgba(243, 110, 220, 0.08);
+}
+
+[data-theme="ember"] .btn.secondary:hover {
+  box-shadow: 0 0 9px rgba(232, 168, 56, 0.08);
+}
+
+[data-theme="aurora"] .btn.secondary:hover {
+  box-shadow: 0 0 9px rgba(192, 132, 252, 0.08);
+}
+
+[data-theme="inferno"] .btn.secondary:hover {
+  box-shadow: 0 0 9px rgba(255, 107, 53, 0.08);
+}
+
+.btn:disabled,
+.btn.loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* --- HTML Output --- */
+.html-output {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 14px;
+  min-height: 150px;
+  max-height: 450px;
+  overflow-y: auto;
+  font-size: 1rem;
+}
+
+.html-output table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1em;
+  color: var(--text);
+  background: var(--bg-input);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.html-output th {
+  background: var(--bg-card);
+  padding: 7px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.html-output td {
+  padding: 7px;
+  border-bottom: 1px solid var(--border);
+}
+
+.html-output tr:nth-child(even) td {
+  background: var(--row-alt);
+}
+
+/* --- Toast --- */
+.toast {
+  position: fixed;
+  bottom: 27px;
+  right: 27px;
+  z-index: 200;
+  padding: 16px 27px;
+  border-radius: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(9px);
+  font-family: var(--font-body);
+  font-size: 20px;
+  color: var(--text);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.hidden {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+.toast.success { border-color: var(--accent); }
+.toast.error { border-color: var(--pink); }
+
+/* --- HR --- */
+hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 3px 0;
+}
+
+/* --- Queue Sections --- */
+.queue-section {
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 11px 14px;
+  background: var(--bg-card);
+  backdrop-filter: blur(6px);
+}
+
+.queue-section.hidden {
+  display: none;
+}
+
+.queue-section-label {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+
+[data-theme="aurora"] .queue-section-label,
+[data-theme="inferno"] .queue-section-label {
+  color: #ffffff;
+}
+
+/* --- Queue Strip --- */
+.queue-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  overflow-y: auto;
+  max-height: 225px;
+  padding: 7px 4px;
+  margin-top: 11px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg-1);
+}
+
+.queue-strip.hidden {
+  display: none;
+}
+
+.queue-strip::-webkit-scrollbar {
+  width: 3px;
+}
+.queue-strip::-webkit-scrollbar-track {
+  background: var(--bg-1);
+  border-radius: 2px;
+}
+.queue-strip::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* --- Queue Card --- */
+.queue-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  min-height: 68px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 11px 18px;
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--text);
+  transition: transform 0.2s ease, opacity 0.3s ease, border-color 0.2s;
+  cursor: default;
+  overflow: hidden;
+}
+
+.queue-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4.4px;
+  border-radius: 11px 0 0 11px;
+  background: var(--muted);
+}
+
+.queue-card.waiting::before { background: var(--muted); }
+.queue-card.running::before { background: var(--accent-hover); }
+.queue-card.done::before { background: var(--accent); }
+.queue-card.error::before { background: var(--pink); }
+
+.queue-card.enter {
+  animation: queueCardEnter 0.25s ease forwards;
+}
+
+.queue-card.leave {
+  animation: queueCardLeave 0.3s ease forwards;
+}
+
+@keyframes queueCardEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-9px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes queueCardLeave {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-9px);
+  }
+}
+
+.queue-card .qc-prompt {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.queue-card .qc-meta {
+  flex: 0 0 auto;
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.queue-card .qc-status {
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  margin-left: auto;
+  padding-left: 6px;
+}
+
+.queue-card.waiting .qc-status { color: var(--muted); }
+.queue-card.running .qc-status { color: var(--accent-hover); }
+.queue-card.done .qc-status { color: var(--accent); }
+.queue-card.error .qc-status { color: var(--pink); }
+
+.queue-card .qc-remove {
+  flex: 0 0 auto;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+  margin-left: 4px;
+}
+
+.queue-card.waiting:hover .qc-remove {
+  opacity: 1;
+}
+
+.queue-card .qc-remove:hover {
+  color: var(--pink);
+}
+
+/* --- Queue Count Badge --- */
+.generate-status {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: var(--pink);
+  margin-left: 6px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+.generate-status.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.queue-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 20px;
+  background: var(--accent);
+  color: var(--bg-0);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-left: 4px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.queue-count-badge.hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+/* --- Responsive --- */
+
+/* Wide desktop: everything side-by-side as designed */
+
+/* Medium / split-screen (~900-900px): allow wrapping */
+@media (max-width: 900px) {
+  .form-row {
+    flex-wrap: wrap;
+  }
+  .form-row > .field {
+    min-width: 180px;
+    flex: 1 1 180px;
+  }
+  .form-row > .field.stretch {
+    min-width: 225px;
+    flex: 2 1 225px;
+  }
+}
+
+/* Narrow / tablet portrait (~600-675px): 2 columns max where possible */
+@media (max-width: 675px) {
+  .container {
+    padding: 6px 9px;
+  }
+  .form-row > .field {
+    min-width: 150px;
+    flex: 1 1 45%;
+  }
+  .form-row.three > .field {
+    flex: 1 1 45%;   /* 2 per row */
+  }
+  /* Skeleton + thumbnail stacks */
+  #skeletonRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+  }
+  #skeletonRow > .field.stretch {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+  }
+  #skeletonRow > .thumbnail-wrap {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: 160px;
+    width: auto;
+    max-width: 140px;
+    align-self: center;
+  }
+}
+
+/* Mobile (~450px): single column */
+@media (max-width: 450px) {
+  .form-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .form-row > .field,
+  .form-row.three > .field,
+  .form-row.two > .field {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
+  .btn-row {
+    flex-wrap: wrap;
+  }
+  .btn {
+    flex: 1 1 auto;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  .container {
+    padding: 3px 6px;
+  }
+  .hero h1 {
+    font-size: 1.2rem;
+  }
+}
+
+.seed-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.seed-row input {
+  flex: 1 1 auto;
+}
+.seed-row .btn {
+  flex: 0 0 auto;
+  padding: 8px 11px;
+  font-size: 1.1rem;
+  text-transform: none;
+}
+
+
+.field input[type="file"] {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 9px 11px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.field input[type="file"]::file-selector-button {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  padding: 6px 11px;
+  margin-right: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.field input[type="file"]::file-selector-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.output-image-wrap {
+  position: relative;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#outputImage {
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+#outputVignetteCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .scanline { display: none !important; }
+}
+
+/* --- Cropper Modal --- */
+.modal { position: fixed; inset: 0; z-index: 300; display: flex; flex-direction: column; }
+.modal.hidden { display: none; }
+.modal-backdrop { position: absolute; inset: 0; background: var(--modal-bg); }
+.modal-content { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100vh; }
+.cropper-toolbar { display: flex; gap: 14px; align-items: flex-end; padding: 14px 22px; border-bottom: 1px solid var(--border); background: var(--bg-card); flex-shrink: 0; }
+.cropper-toolbar .field { margin-bottom: 0; min-width: 150px; }
+.cropper-scroll { flex: 1 1 auto; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 22px; }
+.cropper-image-wrap { position: relative; display: inline-block; line-height: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+#cropperImage { display: block; }
+#cropperCanvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
+.cropper-stats { position: absolute; top: 9px; left: 9px; background: var(--modal-bg); border: 1px solid var(--border); border-radius: 9px; padding: 7px 11px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text); pointer-events: none; backdrop-filter: blur(3px); line-height: 1.5; z-index: 2; }
+.cropper-stats.hidden { display: none; }
+.cropper-preview-block { width: 100%; max-width: 600px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+.cropper-preview-block.hidden { display: none; }
+#cropperPreviewCanvas { width: 100%; height: auto; border-radius: 9px; border: 1px solid var(--border); display: block; }
+
+/* --- Resource Gauges --- */
+.gauge-row {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.gauge {
+  flex: 1 1 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gauge-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+[data-theme="aurora"] .gauge-label,
+[data-theme="inferno"] .gauge-label {
+  color: #ffffff;
+}
+
+.gauge-track {
+  height: 6px;
+  background: var(--bg-1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  transition: width 0.4s ease;
+}
+
+.gauge-fill.warn { background: linear-gradient(90deg, #ffcc00, #ffaa00); }
+.gauge-fill.danger { background: linear-gradient(90deg, #ff4444, #ff2222); }
+
+.gauge-value {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+  text-align: right;
+}
+
+[data-theme="aurora"] .tab-btn,
+[data-theme="aurora"] .sub-tab-btn,
+[data-theme="inferno"] .tab-btn,
+[data-theme="inferno"] .sub-tab-btn {
+  color: #ffffff;
+}
+
+[data-theme="aurora"] .tab-btn.active,
+[data-theme="aurora"] .sub-tab-btn.active,
+[data-theme="inferno"] .tab-btn.active,
+[data-theme="inferno"] .sub-tab-btn.active {
+  color: var(--accent);
+}
+
+[data-theme="aurora"] .field label,
+[data-theme="inferno"] .field label {
+  color: #ffffff;
+}
+
+/* --- Post-Process Panel --- */
+#postProcessPanel { display: none; }
+#postProcessPanel.active { display: block; }
+
+.postprocess-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.postprocess-col {
+  background: rgba(10, 17, 28, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.pp-section-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pp-preview-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin-bottom: 0;
+}
+.pp-preview-wrap:has(canvas[style*="display:none"]) {
+  display: none;
+}
+
+[data-theme="ember"] .postprocess-col {
+  background: rgba(30, 30, 30, 0.4);
+  border-color: var(--border);
+}
+[data-theme="aurora"] .postprocess-col {
+  background: rgba(26, 18, 46, 0.4);
+  border-color: var(--border);
+}
+[data-theme="inferno"] .postprocess-col {
+  background: rgba(40, 20, 20, 0.4);
+  border-color: var(--border);
+}
+
+/* --- Post-Process toggle switch --- */
+.pp-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pp-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pp-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.pp-toggle-track {
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid var(--border);
+  position: relative;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.pp-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s;
+}
+
+.pp-toggle input:checked + .pp-toggle-track {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.pp-toggle input:checked + .pp-toggle-track .pp-toggle-thumb {
+  transform: translateX(20px);
+  background: #0b0f19;
+}
+
+.pp-toggle-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--fg);
+  min-width: 22px;
+}
+
+#ppControlsRow.disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  filter: grayscale(0.6);
+}
+
+[data-theme="ember"] .pp-toggle input:checked + .pp-toggle-track { background: var(--accent); border-color: var(--accent); }
+[data-theme="aurora"] .pp-toggle input:checked + .pp-toggle-track { background: var(--accent); border-color: var(--accent); }
+[data-theme="inferno"] .pp-toggle input:checked + .pp-toggle-track { background: var(--accent); border-color: var(--accent); }
+
+/* Responsive post-process */
+@media (max-width: 900px) {
+  .postprocess-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .postprocess-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================================================
+   PhotoCraft AI — the embedded pane at the editor's density
+   The studio is designed at a 27 px root with px paddings for a full window. Inside PhotoCraft AI
+   it is a dock pane 430-460 px wide, so every primitive is restated at the editor's scale: 11-12 px
+   text, ~24 px rows, 1 px seams, pills for buttons. Prefixing html[...] keeps these above the
+   studio's own rules and its <=450 px media query.
+   ============================================================================================ */
+html[data-theme="photocraft"] .container {
+  max-width: none; padding: 8px 10px 14px;
+}
+html[data-theme="photocraft"] .tab-btn,
+html[data-theme="photocraft"] .sub-tab-btn {
+  font-size: 12px; font-weight: 500; letter-spacing: 0; padding: 5px 8px;
+}
+html[data-theme="photocraft"] .tab-btn.active,
+html[data-theme="photocraft"] .sub-tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+html[data-theme="photocraft"] .tab-bar { margin-bottom: 0; }
+/* In the panel the column is short and never needs pinning; a pinned header there only ever ate
+   the top of the Status row, so it scrolls with the content instead. */
+html[data-theme="photocraft"] #stickyHeader {
+  position: static; box-shadow: none; padding-bottom: 6px;
+}
+html[data-theme="photocraft"] .glass-panel {
+  padding: 8px 10px; margin-bottom: 8px; border-radius: 3px; border: 1px solid var(--border);
+}
+html[data-theme="photocraft"] .section-header {
+  font-size: 12px; font-weight: 600; letter-spacing: 0; color: var(--text);
+  padding-bottom: 4px; margin-bottom: 7px; gap: 6px;
+}
+html[data-theme="photocraft"] .section-header::before {
+  width: 2px; height: 11px; border-radius: 0; background: var(--accent);
+}
+html[data-theme="photocraft"] .form-row { gap: 8px; margin-bottom: 7px; }
+html[data-theme="photocraft"] .field { margin-bottom: 0; }
+html[data-theme="photocraft"] .field label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0; margin-bottom: 3px; padding-left: 0;
+}
+html[data-theme="photocraft"] .field input,
+html[data-theme="photocraft"] .field select,
+html[data-theme="photocraft"] .field textarea {
+  font-family: var(--font-body); font-size: 12px; padding: 3px 6px;
+  border-radius: 3px; border: 1px solid var(--border); background: var(--bg-input);
+  min-height: 24px;
+}
+html[data-theme="photocraft"] .field select { padding: 2px 4px; }
+/* 12 rows, not 8: the column is tall and narrow, and a paragraph of prompt was being edited
+   through a four-line slot. min-height tracks rows so an empty box does not shrink back. */
+html[data-theme="photocraft"] .field textarea#positivePrompt { min-height: 230px; }
+html[data-theme="photocraft"] .field input[type="range"] { height: 4px; border-radius: 2px; }
+html[data-theme="photocraft"] .field input[type="range"]::-webkit-slider-thumb {
+  width: 11px; height: 11px; border-radius: 50%; background: #c8c8c8;
+  border: 1px solid #2b2b2b; box-shadow: none;
+}
+html[data-theme="photocraft"] .btn-row { gap: 6px; margin-bottom: 6px; }
+html[data-theme="photocraft"] #generateBar {
+  padding: 5px 6px; border-radius: 3px; border: 1px solid var(--border); margin: 6px 0 0;
+}
+html[data-theme="photocraft"] .btn {
+  font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none;
+  padding: 5px 12px; border-radius: 999px; border: 1px solid #6d6d6d; background: var(--bg-1);
+  color: var(--text);
+}
+html[data-theme="photocraft"] .btn:hover { transform: none; background: #5a5a5a; color: #fff; }
+html[data-theme="photocraft"] .btn.primary,
+html[data-theme="photocraft"] .btn.primary:hover {
+  background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600;
+  font-size: 12.5px; padding: 6px 12px; box-shadow: none;
+}
+html[data-theme="photocraft"] .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+html[data-theme="photocraft"] .btn.secondary,
+html[data-theme="photocraft"] .btn.secondary:hover {
+  background: var(--bg-1); border-color: #6d6d6d; color: var(--text); box-shadow: none;
+}
+html[data-theme="photocraft"] .btn.secondary:hover { background: #5a5a5a; }
+/* the Generate bar's hero button carries an inline padding for the old showcase layout */
+html[data-theme="photocraft"] #btnGenerate { padding: 6px 12px !important; font-size: 12.5px; }
+html[data-theme="photocraft"] .gauge-row { gap: 6px; margin-bottom: 6px; }
+html[data-theme="photocraft"] .gauge {
+  padding: 4px 6px; border-radius: 3px; border: 1px solid var(--border); gap: 3px;
+}
+html[data-theme="photocraft"] .gauge-label { font-size: 10px; letter-spacing: 0; text-transform: none; }
+html[data-theme="photocraft"] .gauge-value { font-size: 10.5px; }
+html[data-theme="photocraft"] .gauge-track { height: 3px; border-radius: 2px; }
+html[data-theme="photocraft"] .gauge-fill { border-radius: 2px; background: var(--accent); }
+html[data-theme="photocraft"] .seed-row { gap: 4px; }
+html[data-theme="photocraft"] .seed-row .btn { padding: 4px 9px; font-size: 11.5px; }
+html[data-theme="photocraft"] .queue-section-label { font-size: 10.5px; letter-spacing: 0; text-transform: none; }
+html[data-theme="photocraft"] .field input[type="file"] { padding: 4px 6px; font-size: 11.5px; }
+html[data-theme="photocraft"] .field input[type="file"]::file-selector-button {
+  font-size: 11.5px; padding: 3px 8px; border-radius: 999px; margin-right: 6px;
+  border: 1px solid #6d6d6d; background: var(--bg-1); color: var(--text);
+}
+/* the studio's scrollbars were the browser's white ones — the editor's are thin and grey. The root
+   element needs its own rules: `html[...] *` is a descendant selector and does not match <html>, so
+   the document's own scrollbar kept the platform default and stayed white. */
+html[data-theme="photocraft"] { scrollbar-width: thin; scrollbar-color: #6d6d6d #3a3a3a; }
+html[data-theme="photocraft"] * { scrollbar-width: thin; scrollbar-color: #6d6d6d #3a3a3a; }
+html[data-theme="photocraft"]::-webkit-scrollbar,
+html[data-theme="photocraft"] ::-webkit-scrollbar { width: 9px; height: 9px; }
+html[data-theme="photocraft"]::-webkit-scrollbar-track,
+html[data-theme="photocraft"] ::-webkit-scrollbar-track { background: #3a3a3a; }
+html[data-theme="photocraft"]::-webkit-scrollbar-thumb,
+html[data-theme="photocraft"] ::-webkit-scrollbar-thumb { background: #6d6d6d; border-radius: 0; }
+html[data-theme="photocraft"]::-webkit-scrollbar-thumb:hover,
+html[data-theme="photocraft"] ::-webkit-scrollbar-thumb:hover { background: #808080; }
+
+/* the gauges carry "31% (9.47/30.5 GB) · core 37%" — one line, clipped, not three lines of wrap */
+html[data-theme="photocraft"] .gauge-label,
+html[data-theme="photocraft"] .gauge-value {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+html[data-theme="photocraft"] .gauge { justify-content: center; }
+
+/* The Generate bar must not grow when a job is queued: the base count badge is a 38 px circle with
+   1 rem type, which pushed the whole toolbar from 41 to 50 px the moment generation started. */
+html[data-theme="photocraft"] .queue-count-badge {
+  min-width: 17px; height: 17px; padding: 0 4px; margin-left: 3px;
+  border-radius: 999px; background: var(--accent); color: #ffffff;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+}
+html[data-theme="photocraft"] .generate-status {
+  font-family: var(--font-mono); font-size: 10.5px; margin-left: 4px;
+}
+
+/* the reset sits at the foot of Generation Setup: a small utility, not a second hero button in
+   the Generate bar */
+html[data-theme="photocraft"] .setup-reset-row { margin: 2px 0 0; }
+html[data-theme="photocraft"] .setup-reset-row .btn {
+  font-size: 11px; padding: 3px 9px; border-radius: 3px;
+  color: var(--muted); background: transparent; border-color: var(--border);
+}
+html[data-theme="photocraft"] .setup-reset-row .btn:hover {
+  color: var(--text); background: #5a5a5a; border-color: #6d6d6d;
+}
+
+/* Post-processing: a checkbox and the layer it adds, two rows, nothing else — the values are the
+   document's, so there is nothing to type. The checkbox gets a full tap target of its own. */
+html[data-theme="photocraft"] .adjust-row {
+  display: flex; align-items: center; gap: 4px;
+}
+html[data-theme="photocraft"] .adjust-item {
+  display: flex; align-items: center; gap: 2px; flex: 1 1 0; min-width: 0;
+}
+html[data-theme="photocraft"] .adjust-check {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 26px; flex: 0 0 auto; cursor: pointer;
+}
+html[data-theme="photocraft"] .adjust-check input[type="checkbox"] {
+  width: 14px; height: 14px; margin: 0; cursor: pointer;
+  accent-color: var(--accent);
+}
+html[data-theme="photocraft"] .adjust-item .adjust-add {
+  flex: 1 1 auto; min-width: 0; font-size: 11px; padding: 4px 6px; border-radius: 3px;
+  text-align: left;
+}
+html[data-theme="photocraft"] .adjust-item .adjust-add.busy { opacity: 0.55; }
+
+/* ── The queue: one slim row, not a card stack ───────────────────────────────
+   The base look is a 16 px-radius box holding a 14 px-radius 68 px card with 14.3 px type, an 18 px
+   gap and a 14 px top margin: 130 px of slab for one line of information, parked between the
+   resource gauges and the Prompt panel. The information is exactly one line — what is running, on
+   which model at what size, and in what state — so it gets one: a 2 px state rail, the prompt in
+   mono, the meta, the state, ~26 px tall. Extra jobs stack as rows with hairlines. */
+html[data-theme="photocraft"] .queue-section {
+  display: flex; align-items: stretch; gap: 0;
+  margin: 0 0 6px; padding: 0 7px 0 0;
+  border: 1px solid var(--border); border-radius: 3px;
+  background: var(--bg-1);
+  overflow: hidden;
+}
+html[data-theme="photocraft"] .queue-section.hidden { display: none; }
+/* the stage reads as a gutter down the left edge, not a heading above the row; top-aligned so it
+   sits on the first row's line when several jobs stack */
+html[data-theme="photocraft"] .queue-section-label {
+  flex: 0 0 auto; align-self: stretch; display: flex; align-items: flex-start;
+  max-width: 96px; margin: 0; padding: 6px 7px 0; overflow: hidden;
+  border-right: 1px solid var(--border); background: var(--bg-input);
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted);
+  white-space: nowrap; text-overflow: ellipsis;
+}
+html[data-theme="photocraft"] .queue-strip {
+  flex: 1 1 auto; min-width: 0;
+  display: flex; flex-direction: column; gap: 0;
+  max-height: 96px; margin: 0; padding: 0; overflow-y: auto;
+}
+html[data-theme="photocraft"] .queue-strip::-webkit-scrollbar { width: 4px; }
+html[data-theme="photocraft"] .queue-card {
+  position: relative;
+  display: flex; align-items: center; gap: 7px;
+  min-height: 24px; padding: 3px 0 3px 9px;
+  border: 0; border-radius: 0; background: none;
+  font-size: 11px;
+}
+html[data-theme="photocraft"] .queue-card + .queue-card { border-top: 1px solid var(--border); }
+html[data-theme="photocraft"] .queue-card::before {
+  left: 0; top: 3px; bottom: 3px; width: 2px; border-radius: 0;
+}
+html[data-theme="photocraft"] .queue-card .qc-prompt { font-size: 11px; line-height: 1.45; }
+html[data-theme="photocraft"] .queue-card .qc-meta {
+  flex: 0 0 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  font-size: 10px;
+}
+/* the model is already named in the Generation Setup summary a row below, and in the panel's
+   width it was squeezing the prompt down to a stub — the row keeps the size, not the model */
+html[data-theme="photocraft"] .queue-card .qc-model { display: none; }
+html[data-theme="photocraft"] .queue-card .qc-status {
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: 0.6px; margin-left: auto; padding-left: 4px;
+}
+html[data-theme="photocraft"] .queue-card .qc-remove { font-size: 13px; padding: 0 3px; margin-left: 0; }
+/* a running job says so with a slow 1.5 px light travelling along the row's foot */
+html[data-theme="photocraft"] .queue-card.running::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--accent-hover), transparent) no-repeat;
+  background-size: 45% 100%;
+  animation: pcQueueSweep 1.6s ease-in-out infinite;
+}
+@keyframes pcQueueSweep {
+  from { background-position: -50% 0; }
+  to   { background-position: 150% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="photocraft"] .queue-card.running::after {
+    animation: none; background: var(--accent-hover); background-size: 100% 100%; opacity: 0.5;
+  }
+}
+
+/* PhotoCraft as the I2I source — one checkbox under the file input, in the panel's density */
+.pc-source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 12px;
+}
+.pc-source input[type="checkbox"] {
+  width: auto !important;
+  margin: 0;
+  accent-color: #378ef0;
+}
+.pc-source label {
+  margin: 0;
+  cursor: pointer;
+  color: var(--text-muted, #a0a0a0);
+  font-size: 12px;
+  line-height: 1.3;
+}
+.pc-source input:checked + label { color: var(--text, #eeeeee); }
+
+/* image_2 … image_N as they will be sent. The number is what the prompt says ("image 2"), so it
+   leads and the layer's name follows. */
+.ref-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.ref-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-input, #454545);
+  border: 1px solid var(--seam, #343434);
+  color: var(--text, #eeeeee);
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ref-chip b { color: var(--accent, #378ef0); font-weight: 600; }
+.ref-dims { color: var(--text-muted, #a0a0a0); font-size: 10px; font-family: var(--mono, monospace); }
+/* A layer the current model cannot take: visible, but plainly not going to be sent. */
+.ref-note { align-self: center; color: var(--text-muted, #a0a0a0); font-size: 10.5px; line-height: 1.3; }
+
+/* ── Concertina sections ───────────────────────────────────────────
+   A folded group whose header stays readable: 0fr/1fr grid rows animate to the content's own
+   height (max-height would need a guessed number), and the body clips as it shuts. */
+.concertina { display: flex; flex-direction: column; flex-shrink: 0; }
+
+.concertina-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; padding: 0; margin: 0; border: none; background: none;
+  font: inherit; color: inherit; text-align: left; cursor: pointer;
+}
+.concertina-toggle .section-header { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.concertina-toggle:hover .section-header { color: var(--accent); }
+
+.concertina-right { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.concertina-summary {
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 215px;
+}
+.concertina-chevron {
+  flex: none; width: 7px; height: 7px; margin-top: -2px;
+  border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+  transform: rotate(-135deg); transition: transform 0.18s ease;
+}
+.concertina.collapsed .concertina-chevron { transform: rotate(45deg); margin-top: 2px; }
+
+/* The 0fr/1fr row is the right mechanism, but THIS Chromium (Brave, current) never finishes the
+   `grid-template-rows` transition — a toggled section stays at its old height forever, which is
+   exactly how a working collapse reads as broken. The row therefore snaps, and the body fades, which
+   is reliable in this build and still reads as a fold. */
+.concertina-body { display: grid; grid-template-rows: 1fr; margin-top: 8px; }
+.concertina-body > * { min-height: 0; }
+.concertina.collapsed .concertina-body { grid-template-rows: 0fr; margin-top: 0; }
+.concertina-body-inner {
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 0; overflow: hidden;
+  transition: opacity 0.14s ease;
+}
+.concertina.collapsed .concertina-body-inner { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .concertina-body-inner, .concertina-chevron { transition: none; }
+}
+
+/* ── Numeric fields ─────────────────────────────────────────────────
+   A plain field shaped like the text inputs: no spinner, figures in the mono face, so three of
+   them sit side by side where a slider used to take a whole row. */
+.field input.num {
+  font-family: var(--font-mono);
+  appearance: textfield;
+  -moz-appearance: textfield;
+  min-width: 0;
+}
+.field input.num::-webkit-outer-spin-button,
+.field input.num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* In the compact column the paired rows must not wrap: equal columns that can shrink to nothing. */
+html[data-theme="photocraft"] .field input.num { font-family: var(--font-mono); }
+html[data-theme="photocraft"] .form-row.two { gap: 6px; }
+html[data-theme="photocraft"] .form-row.three { gap: 6px; }
+html[data-theme="photocraft"] .form-row.two > .field { flex: 1 1 0; min-width: 0; }
+html[data-theme="photocraft"] .form-row.three > .field { flex: 1 1 0; min-width: 0; }
+html[data-theme="photocraft"] .form-row > .field.stretch { flex: 2 1 0; min-width: 0; }
+html[data-theme="photocraft"] .concertina-summary { max-width: 190px; }
+
+/* The panel column is ~430 px wide, which trips the app's "450 px and narrower = stack every row"
+   rule. That stacking is what made the section a full screen tall; with numbers instead of sliders a
+   pair — or three — fits across the column, so keep them in a row here. */
+@media (max-width: 450px) {
+  html[data-theme="photocraft"] .form-row { flex-direction: row; gap: 6px; }
+  html[data-theme="photocraft"] .form-row > .field,
+  html[data-theme="photocraft"] .form-row.two > .field,
+  html[data-theme="photocraft"] .form-row.three > .field {
+    min-width: 0; flex: 1 1 0;
+  }
+  html[data-theme="photocraft"] .form-row > .field.stretch { flex: 2 1 0; }
+}
+
+/* --- Prompt label row with its Paste button ------------------------------------------------ */
+.label-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: 4px;
+}
+.label-row label { margin-bottom: 0; }
+.mini-btn {
+  flex: 0 0 auto;
+  font-family: var(--font-body); font-size: 11px; line-height: 1; letter-spacing: 0.2px;
+  padding: 3px 7px; border-radius: 3px; cursor: pointer;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border);
+  transition: color .14s ease, border-color .14s ease, background .14s ease;
+}
+.mini-btn:hover { color: var(--text); border-color: var(--muted); }
+.mini-btn:active { background: var(--bg-input); }
+.mini-btn:focus-visible { outline: 1px solid var(--border-focus); outline-offset: 1px; }
+
+/* The prompt's label row carries up to two buttons now (Qwen Templates · Paste). */
+.label-actions { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+#btnQwenTemplates[hidden] { display: none; }
+
+/* The template list. Fixed-positioned and placed from the button's rect by JS: the prompt panel
+   clips its own overflow, so an absolute list would be cut off at the panel's edge. */
+.tpl-menu {
+  position: fixed;
+  z-index: 250;              /* over the sticky Generate bar (90), pinned header (95) and topbar (100) */
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+  padding: 4px;
+  border-radius: 4px;
+  background: var(--bg-card, #3a3a3a);
+  border: 1px solid var(--border, #4a4a4a);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+  scrollbar-width: thin;
+}
+.tpl-menu[hidden] { display: none; }
+.tpl-item {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 5px 7px;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text, #eeeeee);
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.tpl-item:hover,
+.tpl-item:focus-visible {
+  background: var(--bg-input, #454545);
+  color: var(--accent, #378ef0);
+  outline: none;
+}
+
+html[data-theme="photocraft"] .label-row { margin-bottom: 3px; }
+html[data-theme="photocraft"] .mini-btn {
+  font-size: 10.5px; padding: 2px 6px; border-radius: 2px;
+  background: #4a4a4a; color: #c8c8c8; border: 1px solid #5a5a5a;
+}
+html[data-theme="photocraft"] .mini-btn:hover { background: #5a5a5a; color: #ffffff; }
+/* The panel's density: 11 px rows, 2 px corners, the editor's own greys. */
+html[data-theme="photocraft"] .tpl-menu {
+  padding: 3px;
+  border-radius: 2px;
+  background: #535353;
+  border: 1px solid #343434;
+}
+html[data-theme="photocraft"] .tpl-item {
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 0;
+  color: #eeeeee;
+}
+html[data-theme="photocraft"] .tpl-item:hover,
+html[data-theme="photocraft"] .tpl-item:focus-visible { background: #454545; color: #378ef0; }
+
+/* ── Models tab ───────────────────────────────────────────────────────────────
+   One card per model: the file, its text encoder, encoder type and VAE, then the sampling
+   numbers it ships with. Cards, not a table — the app is used on a narrow column, and a
+   4-column grid of file names wraps into unreadable stubs there. */
+.models-list { display: flex; flex-direction: column; gap: 10px; margin: 8px 0 4px; }
+.model-card {
+  border: 1px solid var(--border); border-radius: 4px; background: var(--bg-input);
+  padding: 10px 10px 4px;
+}
+.model-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.model-card-head .model-name {
+  flex: 1 1 auto; min-width: 0; font-family: var(--font-mono, monospace); font-size: 12px;
+  font-weight: 600;
+}
+.model-card .model-del {
+  flex: 0 0 auto; width: 24px; height: 24px; line-height: 1; font-size: 15px; cursor: pointer;
+  background: transparent; color: var(--muted, #999); border: 1px solid var(--border);
+  border-radius: 3px;
+}
+.model-card .model-del:hover { color: var(--pink, #f66); border-color: currentColor; }
+.model-flag {
+  flex: 0 0 auto; font-size: 10px; padding: 1px 5px; border-radius: 3px;
+  color: var(--pink, #f66); border: 1px solid currentColor;
+}
+.models-hint { font-family: var(--font-mono, monospace); font-size: 11px; color: var(--muted, #9aa);
+  line-height: 1.5; margin: 4px 0 8px; }
+.models-hint .ok { color: #6f6; }
+.models-hint .warn { color: var(--pink, #f66); }
+.models-hint .dim { color: var(--muted, #9aa); opacity: 0.8; word-break: break-all; }
+.models-link {
+  display: block; margin: 6px 0 0; padding: 0; background: none; border: none; cursor: pointer;
+  color: var(--muted, #9aa); font-size: 11px; text-align: left; text-decoration: underline;
+}
+.models-link:hover { color: var(--text, #eee); }
+.model-card .field { margin-bottom: 8px; }

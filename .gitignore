@@ -1,0 +1,15 @@
+# personal state — created on first run from config.example.json
+config.json
+config.json.bak-*
+config.json.tmp
+user_settings.json
+user_settings.json.bak-*
+
+# runtime
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.log
+*.pid
+.DS_Store

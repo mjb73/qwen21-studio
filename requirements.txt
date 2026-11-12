@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+numpy
+python-multipart
+
+# only for the post-processing tab (crop / adjust) — optional, the app runs without it
+Pillow

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyberpunk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ComfyUI Generator</title>
+  <link rel="stylesheet" href="/styles.css?v=x54">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="scanline"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">~/</span>
+      <span class="brand-name gradient-text" id="appTitle">Qwen-Image 2.1 Studio</span>
+    </div>
+    <div class="model-badge" id="versionBadge">v1.5</div>
+    <select id="themeSelect" class="theme-select">
+      <option value="cyberpunk">Cyberpunk Neon</option>
+      <option value="ember">Obsidian Ember</option>
+      <option value="aurora">Midnight Aurora</option>
+      <option value="inferno">Dark Inferno</option>
+      <option value="photocraft">PhotoCraft</option>
+    </select>
+  </header>
+
+  <main class="container">
+    <!-- Sticky header: the sub-tabs stay pinned under the topbar. The Generate bar used to live here
+         too; it now closes the column, under the prompt and the two folded sections it acts on. -->
+    <div id="stickyHeader">
+    <!-- Tab bar -->
+    <nav class="tab-bar" id="tabBar">
+      <button class="tab-btn active" data-tab="prompt">Prompt</button>
+      <button class="tab-btn" data-tab="defaults">Defaults</button>
+      <button class="tab-btn" data-tab="models">Models</button>
+    </nav>
+    </div>
+
+    <!-- Global Status -->
+    <div class="form-row one" style="margin-bottom:4px;">
+      <div class="field" style="margin-bottom:0;">
+        <label>Status</label>
+        <input type="text" id="status" value="Ready" readonly>
+      </div>
+    </div>
+
+    <!-- Resource Gauges -->
+    <div class="gauge-row" id="gaugeRow">
+      <div class="gauge" id="gaugeCpu">
+        <div class="gauge-label">CPU</div>
+        <div class="gauge-track"><div class="gauge-fill"></div></div>
+        <div class="gauge-value">--%</div>
+      </div>
+      <div class="gauge" id="gaugeRam">
+        <div class="gauge-label">RAM</div>
+        <div class="gauge-track"><div class="gauge-fill"></div></div>
+        <div class="gauge-value">--%</div>
+      </div>
+      <div class="gauge" id="gaugeGpu">
+        <div class="gauge-label">GPU</div>
+        <div class="gauge-track"><div class="gauge-fill"></div></div>
+        <div class="gauge-value">--%</div>
+      </div>
+    </div>
+
+    <!-- Prompt Tab -->
+    <div class="tab-panel active" id="promptPanel">
+      <div class="glass-panel">
+        <div class="section-header">Prompt</div>
+        <div class="field">
+          <div class="label-row">
+            <label for="positivePrompt">Positive Prompt</label>
+            <div class="label-actions">
+              <!-- Only with the Qwen-Image 2.1 model selected: fourteen proven edit prompts. -->
+              <button type="button" class="mini-btn" id="btnQwenTemplates" hidden
+                      aria-haspopup="listbox" aria-expanded="false"
+                      title="Insert a proven Qwen-Image 2.1 edit prompt">Qwen Templates</button>
+              <button type="button" class="mini-btn" id="btnPastePrompt"
+                      title="Replace the prompt with the clipboard (Ctrl+V inserts instead)">Paste</button>
+            </div>
+          </div>
+          <div class="tpl-menu" id="qwenTplMenu" role="listbox" aria-label="Qwen-Image 2.1 templates"
+               hidden></div>
+          <textarea id="positivePrompt" rows="12" placeholder="Describe the image you want to generate...">glamorous concept art of a 21 year old woman in a little black dress</textarea>
+        </div>
+      </div>
+
+      <div class="glass-panel concertina collapsed" id="generationSetupPanel">
+        <!-- Folded by default: in the narrow PhotoCraft column the prompt and Generate must stay in
+             reach without scrolling. The header still names the setup in force while the body is shut. -->
+        <button type="button" class="concertina-toggle" id="genSetupToggle"
+                aria-expanded="false" aria-controls="genSetupBody">
+          <span class="section-header">Generation Setup</span>
+          <span class="concertina-right">
+            <span class="concertina-summary" id="genSetupSummary"></span>
+            <span class="concertina-chevron" aria-hidden="true"></span>
+          </span>
+        </button>
+        <div class="concertina-body" id="genSetupBody">
+          <div class="concertina-body-inner">
+
+        <div class="field">
+          <label>Generation Mode</label>
+          <select id="generationMode">
+            <option value="T2I">T2I</option>
+            <option value="I2I">I2I</option>
+            <option value="T2I -> I2I">T2I → I2I (Z→Ernie)</option>
+            <option value="T2I -> I2I (Reversed)">T2I → I2I (Ernie→Z)</option>
+            <option value="T2I -> I2I (Ernie->Krea2)">T2I → I2I (Ernie→Krea2)</option>
+            <option value="T2I -> I2I (Krea2->Ernie)">T2I → I2I (Krea2→Ernie)</option>
+            <option value="T2I -> I2I (Ernie->Ernie)">T2I → I2I (Ernie→Ernie)</option>
+          </select>
+        </div>
+
+        <div class="field" id="modelSelectWrap">
+          <label>Model</label>
+          <select id="unetName"></select>
+        </div>
+
+        <div id="promptSingleControls">
+        <div class="field" id="inputImageWrap">
+          <!-- The picture being edited is image 1: the prompt says "image 1", and the layer
+               references ("image 2", "image 3" …) number from there. Only the Qwen-Image 2.1
+               encoder takes more than one; every other model gets this one image alone. -->
+          <label id="inputImageLabel">Image 1</label>
+          <input type="file" id="inputImage" accept="image/*">
+          <!-- Only inside the PhotoCraft AI panel: take the picture from the open editor document
+               instead of choosing a file. Hidden when the studio runs on its own (no editor to ask). -->
+          <div class="pc-source" id="pcSourceWrap" style="display:none;">
+            <input type="checkbox" id="pcSource" style="width:auto;">
+            <!-- The wording is the model's: a 2.1 run reads named layers image 1/2/3, every other
+                 model takes one picture only. js/main.js sets it from the same test that decides
+                 whether references may be sent (updatePcSourceLabel). -->
+            <label for="pcSource" id="pcSourceLabel">Use the layers named image 1, image 2 … in PhotoCraft</label>
+          </div>
+          <!-- image_2 … image_N: the layers in the open document named "image 2", "image 3" …
+               arrive with the pull and are shown here, because the prompt refers to them by number. -->
+          <div class="ref-strip" id="refStrip" style="display:none;"></div>
+        </div>
+
+        <div class="form-row two" id="mpArRow">
+          <div class="field">
+            <label id="mpLabel">Megapixels</label>
+            <input type="number" id="mpInput" min="0.01" max="50" step="0.01" value="1.54">
+          </div>
+          <div class="field">
+            <label id="arLabel">Aspect Ratio</label>
+            <input type="text" id="arInput" value="9:16">
+          </div>
+        </div>
+
+        <div class="field" id="calcDisplayWrap">
+          <label>Computed Dimensions</label>
+          <input type="text" id="calcDisplay" readonly value="">
+        </div>
+
+        <!-- Sampling profile: sets sampler + scheduler + steps + CFG together. -->
+        <div class="field" id="profileRow">
+          <label>Sampling Profile</label>
+          <select id="promptProfile"></select>
+        </div>
+
+        <!-- Sampling -->
+        <div class="form-row two" id="promptSamplingRow">
+          <div class="field">
+            <label>Sampler</label>
+            <select id="promptSampler"></select>
+          </div>
+          <div class="field">
+            <label>Scheduler</label>
+            <select id="promptScheduler"></select>
+          </div>
+        </div>
+
+        <div class="form-row three" id="promptParamsRow">
+          <div class="field">
+            <label>Steps</label>
+            <input type="number" class="num" inputmode="decimal" id="promptSteps" min="1" max="50" step="1" value="8">
+          </div>
+          <div class="field">
+            <label>CFG</label>
+            <input type="number" class="num" inputmode="decimal" id="promptCFG" min="0" max="20" step="0.1" value="1.0">
+          </div>
+          <div class="field" id="promptDenoiseWrap">
+            <label>Denoise</label>
+            <input type="number" class="num" inputmode="decimal" id="denoise" min="0" max="1" step="0.01" value="1.0">
+          </div>
+        </div>
+
+        <div class="form-row two" id="promptPAGSeedRow">
+          <div class="field" id="promptPAGWrap">
+            <label>PAG</label>
+            <input type="number" class="num" inputmode="decimal" id="promptPAG" min="0" max="2" step="0.01" value="0">
+          </div>
+          <div class="field" id="promptSeedWrap">
+            <label>Seed</label>
+            <div class="seed-row">
+              <input type="number" id="seed" min="0" max="2147483647" value="42">
+              <button class="btn secondary" id="btnRandomSeed" title="Randomize seed">🔀</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row two" id="promptLora1Row">
+          <div class="field stretch">
+            <label>LoRA 1</label>
+            <select id="lora1Name"></select>
+          </div>
+          <div class="field">
+            <label>Strength</label>
+            <input type="number" class="num" inputmode="decimal" id="lora1Strength" min="0" max="2" step="0.05" value="0.35">
+          </div>
+        </div>
+
+        <div class="form-row two" id="promptLora2Row">
+          <div class="field stretch">
+            <label>LoRA 2</label>
+            <select id="lora2Name"></select>
+          </div>
+          <div class="field">
+            <label>Strength</label>
+            <input type="number" class="num" inputmode="decimal" id="lora2Strength" min="0" max="2" step="0.05" value="0.0">
+          </div>
+        </div>
+        </div>
+
+        <!-- Phase 1 / Phase 2 panels (shown for chain modes) -->
+        <div id="promptChainControls" class="chain-columns hidden">
+          <!-- Phase 1 Column -->
+          <div class="chain-col">
+            <div class="section-header">Phase 1</div>
+            <div class="field">
+              <label>Model</label>
+              <input type="text" id="chainPromptP1Model" readonly value="z_image_turbo_bf16.safetensors">
+            </div>
+            <div class="form-row two">
+              <div class="field">
+                <label>Sampler</label>
+                <select id="chainPromptP1Sampler"></select>
+              </div>
+              <div class="field">
+                <label>Scheduler</label>
+                <select id="chainPromptP1Scheduler"></select>
+              </div>
+            </div>
+            <div class="form-row three">
+              <div class="field">
+                <label>Steps</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP1Steps" min="1" max="50" step="1" value="8">
+              </div>
+              <div class="field">
+                <label>CFG</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP1CFG" min="0" max="20" step="0.1" value="1.0">
+              </div>
+              <div class="field">
+                <label>Denoise</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP1Denoise" min="0" max="1" step="0.01" value="1.0">
+              </div>
+            </div>
+            <div class="form-row two">
+              <div class="field">
+                <label>Megapixels</label>
+                <input type="number" id="chainPromptP1MP" min="0.01" max="50" step="0.01" value="1.54">
+              </div>
+              <div class="field">
+                <label>Aspect Ratio</label>
+                <select id="chainPromptP1AR">
+                  <option value="1:1">1:1</option>
+                  <option value="16:9">16:9</option>
+                  <option value="9:16" selected>9:16</option>
+                  <option value="3:2">3:2</option>
+                  <option value="2:3">2:3</option>
+                  <option value="4:3">4:3</option>
+                  <option value="3:4">3:4</option>
+                  <option value="16:10">16:10</option>
+                  <option value="10:16">10:16</option>
+                  <option value="21:9">21:9</option>
+                  <option value="9:21">9:21</option>
+                  <option value="2:1">2:1</option>
+                  <option value="1:2">1:2</option>
+                  <option value="5:4">5:4</option>
+                  <option value="4:5">4:5</option>
+                  <option value="1.85:1">1.85:1</option>
+                  <option value="1:1.85">1:1.85</option>
+                  <option value="2.39:1">2.39:1</option>
+                  <option value="1:2.39">1:2.39</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row two">
+              <div class="field stretch">
+                <label>LoRA 1</label>
+                <select id="chainPromptP1Lora1Name"></select>
+              </div>
+              <div class="field">
+                <label>Strength</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP1Lora1Strength" min="0" max="2" step="0.05" value="0.6">
+              </div>
+            </div>
+            <div class="form-row two">
+              <div class="field stretch">
+                <label>LoRA 2</label>
+                <select id="chainPromptP1Lora2Name"></select>
+              </div>
+              <div class="field">
+                <label>Strength</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP1Lora2Strength" min="0" max="2" step="0.05" value="0.35">
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 2 Column -->
+          <div class="chain-col">
+            <div class="section-header">Phase 2</div>
+            <div class="field">
+              <label>Model</label>
+              <input type="text" id="chainPromptP2Model" readonly value="qwen_image_2.1-Q4_K_M.gguf">
+            </div>
+            <div class="form-row two">
+              <div class="field">
+                <label>Sampler</label>
+                <select id="chainPromptP2Sampler"></select>
+              </div>
+              <div class="field">
+                <label>Scheduler</label>
+                <select id="chainPromptP2Scheduler"></select>
+              </div>
+            </div>
+            <div class="form-row three">
+              <div class="field">
+                <label>Steps</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP2Steps" min="1" max="50" step="1" value="8">
+              </div>
+              <div class="field">
+                <label>CFG</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP2CFG" min="0" max="20" step="0.1" value="1.0">
+              </div>
+              <div class="field">
+                <label>Denoise</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP2Denoise" min="0" max="1" step="0.01" value="0.5">
+              </div>
+            </div>
+            <div class="field">
+              <label>Target Megapixels</label>
+              <input type="number" id="chainPromptP2TargetMP" min="0.01" max="50" step="0.01" value="1.54">
+            </div>
+            <div class="form-row two">
+              <div class="field stretch">
+                <label>LoRA 1</label>
+                <select id="chainPromptP2Lora1Name"></select>
+              </div>
+              <div class="field">
+                <label>Strength</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP2Lora1Strength" min="0" max="2" step="0.05" value="0.35">
+              </div>
+            </div>
+            <div class="form-row two">
+              <div class="field stretch">
+                <label>LoRA 2</label>
+                <select id="chainPromptP2Lora2Name"></select>
+              </div>
+              <div class="field">
+                <label>Strength</label>
+                <input type="number" class="num" inputmode="decimal" id="chainPromptP2Lora2Strength" min="0" max="2" step="0.05" value="0.0">
+              </div>
+            </div>
+          </div>
+        </div>
+            <!-- The prompt-tab reset belongs with the settings it resets — it used to sit in the
+                 Generate bar as a second big button beside Generate Image. -->
+            <div class="btn-row setup-reset-row">
+              <button class="btn secondary" id="btnResetPrompt"
+                      title="Reload the saved defaults for this model and mode">Reset to saved defaults</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post-processing: the finishing moves that act on the picture open in PhotoCraft, not on the
+           render — adjustment layers above its active layer, no parameters. Folded by default: this
+           is the last thing before exporting, not part of what Generate runs. -->
+      <div class="glass-panel concertina collapsed" id="postAdjustPanel">
+        <button type="button" class="concertina-toggle" id="postAdjustToggle"
+                aria-expanded="false" aria-controls="postAdjustBody">
+          <span class="section-header">Post-processing</span>
+          <span class="concertina-right">
+            <span class="concertina-summary" id="postAdjustSummary">off</span>
+            <span class="concertina-chevron" aria-hidden="true"></span>
+          </span>
+        </button>
+        <div class="concertina-body" id="postAdjustBody">
+          <div class="concertina-body-inner">
+            <!-- One row: each item is a checkbox (left ticked = finish every new picture with it)
+                 and the layer's name as the button that adds another one to what is open now. -->
+            <div class="adjust-row">
+              <div class="adjust-item">
+                <label class="adjust-check" title="Tick to finish every new picture with Vibrance">
+                  <input type="checkbox" id="adjustVibranceOn">
+                </label>
+                <button type="button" class="btn secondary adjust-add" id="adjustVibranceBtn"
+                        title="Add a Vibrance layer above the active layer">Vibrance</button>
+              </div>
+              <div class="adjust-item">
+                <label class="adjust-check" title="Tick to finish every new picture with Curves">
+                  <input type="checkbox" id="adjustCurvesOn">
+                </label>
+                <button type="button" class="btn secondary adjust-add" id="adjustCurvesBtn"
+                        title="Add a Curves layer above the active layer">Curves</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Hidden dimension + legacy storage (referenced by ui.js populateSelects & applyPreset) -->
+    <div style="display:none;">
+      <select id="clipName"></select>
+      <select id="clipType"></select>
+      <select id="vaeName"></select>
+      <select id="sampler"></select>
+      <select id="scheduler"></select>
+      <input type="range" id="steps" min="1" max="50" step="1" value="8">
+      <span id="stepsVal">8</span>
+      <input type="range" id="cfg" min="0" max="20" step="0.1" value="1.0">
+      <span id="cfgVal">1.0</span>
+      <input type="range" id="legacyDenoise" min="0" max="1" step="0.01" value="1.0">
+      <span id="legacyDenoiseVal">1.0</span>
+      <select id="dimensionMode"><option value="MP + AR">MP + AR</option></select>
+      <input type="number" id="width" min="64" max="4096" step="64" value="832">
+      <input type="number" id="height" min="64" max="4096" step="64" value="1664">
+    </div>
+
+    <!-- Output Tab -->
+    <!-- Defaults Tab -->
+    <div class="tab-panel" id="defaultsPanel">
+      <div class="glass-panel">
+        <div class="section-header">Defaults</div>
+
+        <!-- Model sub-tabs: one per model in the registry, filled in by js/models.js at load —
+             Chain is the only fixed entry. A model's encoder and VAE are set in the Models tab,
+             so this tab only carries the numbers. -->
+        <div class="sub-tabs" id="defaultsModelTabs">
+          <button class="sub-tab-btn active" data-model="chain">Chain</button>
+        </div>
+
+        <div class="btn-row" style="margin-top:8px;">
+          <button class="btn secondary" id="btnRefreshModels">Refresh Model List</button>
+        </div>
+
+        <!-- Mode selector (hidden for Chain) -->
+        <div class="form-row two" id="defaultsModeRow">
+          <div class="field">
+            <label>Mode</label>
+            <select id="defaultsMode">
+              <option value="t2i">T2I</option>
+              <option value="i2i">I2I</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Chain mode direction selector (hidden for non-Chain) -->
+        <div class="form-row two hidden" id="defaultsChainRow">
+          <div class="field">
+            <label>Chain Direction</label>
+            <select id="chainDirection">
+              <option value="forward">Z-Image → Qwen 2.1</option>
+              <option value="reversed">Ernie → Z-Image</option>
+              <option value="ernie_to_krea2">Ernie → Krea-2</option>
+              <option value="krea2_to_ernie">Krea-2 → Ernie</option>
+              <option value="ernie_upscale">Ernie → Ernie (Upscale)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="chain-columns hidden" id="chainColumns">
+          <!-- Stage 1 Column -->
+          <div class="chain-col">
+            <div class="section-header">Stage 1</div>
+            <div class="field">
+              <label>Model</label>
+              <input type="text" id="chainStage1Model" readonly value="z_image_turbo_bf16.safetensors">
+            </div>
+            <div class="field">
+              <label>Denoise</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage1Denoise" min="0" max="1" step="0.01" value="1.0">
+            </div>
+            <div class="field">
+              <label>Sampler</label>
+              <select id="chainStage1Sampler"></select>
+            </div>
+            <div class="field">
+              <label>Scheduler</label>
+              <select id="chainStage1Scheduler"></select>
+            </div>
+            <div class="field">
+              <label>Steps</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage1Steps" min="1" max="50" step="1" value="8">
+            </div>
+            <div class="field">
+              <label>CFG</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage1CFG" min="0" max="20" step="0.1" value="1.0">
+            </div>
+            <div class="field">
+              <label>Megapixels</label>
+              <input type="number" id="chainStage1MP" min="0.01" max="50" step="0.01" value="1.54">
+            </div>
+            <div class="field">
+              <label>Aspect Ratio</label>
+              <select id="chainStage1AR">
+                <option value="1:1">1:1</option>
+                <option value="21:9">21:9</option>
+                <option value="9:21">9:21</option>
+                <option value="2:1">2:1</option>
+                <option value="1:2">1:2</option>
+                <option value="16:9">16:9</option>
+                <option value="9:16" selected>9:16</option>
+                <option value="16:10">16:10</option>
+                <option value="10:16">10:16</option>
+                <option value="3:2">3:2</option>
+                <option value="2:3">2:3</option>
+                <option value="4:3">4:3</option>
+                <option value="3:4">3:4</option>
+                <option value="5:4">5:4</option>
+                <option value="4:5">4:5</option>
+                <option value="1.85:1">1.85:1</option>
+                <option value="1:1.85">1:1.85</option>
+                <option value="2.39:1">2.39:1</option>
+                <option value="1:2.39">1:2.39</option>
+              </select>
+            </div>
+            <div class="section-header">LoRAs</div>
+            <div class="field">
+              <label>LoRA 1</label>
+              <select id="chainStage1Lora1Name"></select>
+            </div>
+            <div class="field">
+              <label>Strength</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage1Lora1Strength" min="0" max="2" step="0.05" value="0.6">
+            </div>
+            <div class="field">
+              <label>LoRA 2</label>
+              <select id="chainStage1Lora2Name"></select>
+            </div>
+            <div class="field">
+              <label>Strength</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage1Lora2Strength" min="0" max="2" step="0.05" value="0.35">
+            </div>
+          </div>
+
+          <!-- Stage 2 Column -->
+          <div class="chain-col">
+            <div class="section-header">Stage 2</div>
+            <div class="field">
+              <label>Model</label>
+              <input type="text" id="chainStage2Model" readonly value="ernie-image-turbo.safetensors">
+            </div>
+            <div class="field">
+              <label>Denoise</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage2Denoise" min="0" max="1" step="0.01" value="0.5">
+            </div>
+            <div class="field">
+              <label>Sampler</label>
+              <select id="chainStage2Sampler"></select>
+            </div>
+            <div class="field">
+              <label>Scheduler</label>
+              <select id="chainStage2Scheduler"></select>
+            </div>
+            <div class="field">
+              <label>Steps</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage2Steps" min="1" max="50" step="1" value="8">
+            </div>
+            <div class="field">
+              <label>CFG</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage2CFG" min="0" max="20" step="0.1" value="1.0">
+            </div>
+            <div class="field">
+              <label>Upscale</label>
+              <input type="number" class="num" inputmode="decimal" id="chainUpscale" min="0.5" max="3.0" step="0.1" value="1.0">
+            </div>
+            <div class="section-header">LoRAs</div>
+            <div class="field">
+              <label>LoRA 1</label>
+              <select id="chainStage2Lora1Name"></select>
+            </div>
+            <div class="field">
+              <label>Strength</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage2Lora1Strength" min="0" max="2" step="0.05" value="0.35">
+            </div>
+            <div class="field">
+              <label>LoRA 2</label>
+              <select id="chainStage2Lora2Name"></select>
+            </div>
+            <div class="field">
+              <label>Strength</label>
+              <input type="number" class="num" inputmode="decimal" id="chainStage2Lora2Strength" min="0" max="2" step="0.05" value="0.0">
+            </div>
+          </div>
+        </div>
+
+        <!-- Auto Post-Process toggle for chain mode -->
+        <div class="chain-columns" id="chainAutoPPRow">
+          <div class="field" style="flex-direction:row;align-items:center;gap:8px;">
+            <input type="checkbox" id="chainAutoPostProcess" style="width:auto;">
+            <label for="chainAutoPostProcess" style="margin:0;cursor:pointer;">Auto-apply post-processing on each image in queue</label>
+          </div>
+        </div>
+
+        <div id="defaultsModelSections">
+        <!-- Sampling -->
+        <div class="section-header">Sampling</div>
+        <div class="form-row two">
+          <div class="field">
+            <label>Sampler</label>
+            <select id="defaultsSampler"></select>
+          </div>
+          <div class="field">
+            <label>Scheduler</label>
+            <select id="defaultsScheduler"></select>
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="field">
+            <label>Steps</label>
+            <input type="number" class="num" inputmode="decimal" id="defaultsSteps" min="1" max="50" step="1" value="8">
+          </div>
+          <div class="field">
+            <label>CFG</label>
+            <input type="number" class="num" inputmode="decimal" id="defaultsCFG" min="0" max="20" step="0.1" value="1.0">
+          </div>
+          <div class="field">
+            <label>Denoise</label>
+            <input type="number" class="num" inputmode="decimal" id="defaultsDenoise" min="0" max="1" step="0.01" value="1.0">
+          </div>
+        </div>
+
+        <!-- Dimensions (Megapixels + Aspect Ratio) -->
+        <div class="section-header">Dimensions (Megapixels + Aspect Ratio)</div>
+        <div class="form-row two">
+          <div class="field">
+            <label>Megapixels</label>
+            <input type="number" id="defaultsMP" min="0.01" max="50" step="0.01" value="1.54">
+          </div>
+          <div class="field">
+            <label>Aspect Ratio</label>
+            <select id="defaultsAR">
+              <option value="1:1">1:1</option>
+              <option value="21:9">21:9</option>
+              <option value="9:21">9:21</option>
+              <option value="2:1">2:1</option>
+              <option value="1:2">1:2</option>
+              <option value="16:9">16:9</option>
+              <option value="9:16">9:16</option>
+              <option value="16:10">16:10</option>
+              <option value="10:16">10:16</option>
+              <option value="3:2">3:2</option>
+              <option value="2:3">2:3</option>
+              <option value="4:3">4:3</option>
+              <option value="3:4">3:4</option>
+              <option value="5:4">5:4</option>
+              <option value="4:5">4:5</option>
+              <option value="1.85:1">1.85:1</option>
+              <option value="1:1.85">1:1.85</option>
+              <option value="2.39:1">2.39:1</option>
+              <option value="1:2.39">1:2.39</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- LoRA 1 -->
+        <div class="section-header">LoRA 1</div>
+        <div class="form-row two">
+          <div class="field stretch">
+            <label>Model</label>
+            <select id="defaultsLora1Name"></select>
+          </div>
+          <div class="field">
+            <label>Strength</label>
+            <input type="number" class="num" inputmode="decimal" id="defaultsLora1Strength" min="0" max="2" step="0.05" value="0.35">
+          </div>
+        </div>
+
+        <!-- LoRA 2 -->
+        <div class="section-header">LoRA 2</div>
+        <div class="form-row two">
+          <div class="field stretch">
+            <label>Model</label>
+            <select id="defaultsLora2Name"></select>
+          </div>
+          <div class="field">
+            <label>Strength</label>
+            <input type="number" class="num" inputmode="decimal" id="defaultsLora2Strength" min="0" max="2" step="0.05" value="0.0">
+          </div>
+        </div>
+        </div>
+
+        <div class="btn-row" id="defaultsBtnRow">
+          <button class="btn primary" id="btnSaveDefaults">Save Defaults</button>
+          <button class="btn secondary" id="btnResetDefaults">Reset to Config</button>
+        </div>
+      </div>
+    </div>
+
+      <!-- Models Tab — the ComfyUI folder and what each model is made of. This is the tab a new
+           install starts in: without it the app only knows the file names of the machine it was
+           written on. -->
+      <div class="tab-panel" id="modelsPanel">
+        <div class="glass-panel">
+          <div class="section-header">ComfyUI Folder</div>
+          <div class="field">
+            <label>ComfyUI root directory</label>
+            <input type="text" id="modelsComfyRoot" placeholder="~/ComfyUI">
+          </div>
+          <div class="btn-row">
+            <button class="btn secondary" id="btnDetectComfy">Detect</button>
+            <button class="btn secondary" id="btnScanModels">Scan folder</button>
+          </div>
+          <div class="models-hint" id="modelsFolderStatus">Scanning&hellip;</div>
+
+          <button class="models-link" id="btnToggleAdvanced">More paths — python, output, LoRAs, ComfyUI host</button>
+          <div id="modelsAdvanced" class="hidden">
+            <div class="field">
+              <label>Python executable</label>
+              <input type="text" id="modelsComfyPython" placeholder="~/ComfyUI/venv/bin/python">
+            </div>
+            <div class="field">
+              <label>Output directory</label>
+              <input type="text" id="modelsOutputDir" placeholder="~/ComfyUI/output">
+            </div>
+            <div class="field">
+              <label>LoRAs root</label>
+              <input type="text" id="modelsLorasRoot" placeholder="~/ComfyUI/models/loras">
+            </div>
+            <div class="field">
+              <label>ComfyUI host URL</label>
+              <input type="text" id="modelsComfyHost" placeholder="http://localhost:8188">
+            </div>
+          </div>
+
+          <div class="section-header">Models</div>
+          <div class="models-hint">
+            Each model is a diffusion model file plus the text encoder and VAE it runs with.
+          </div>
+          <div id="modelsList" class="models-list"></div>
+          <div class="btn-row">
+            <button class="btn secondary" id="btnAddModel">+ Add model</button>
+            <button class="btn primary" id="btnSaveModels">Save models</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer of the column: what runs, under everything it acts on, pushed to the bottom of the
+         pane so the button and the queue sit together instead of leaving a void beneath them. -->
+    <div id="generateDock">
+      <!-- Queue (visible on all tabs) -->
+      <div class="queue-section hidden" id="queueSectionT2I">
+        <div class="queue-section-label">T2I</div>
+        <div id="queueStripT2I" class="queue-strip"></div>
+      </div>
+      <div class="queue-section hidden" id="queueSectionStage2">
+        <div class="queue-section-label">I2I</div>
+        <div id="queueStripStage2" class="queue-strip"></div>
+      </div>
+
+      <div class="btn-row" id="generateBar" style="align-items:center;">
+        <button class="btn primary" id="btnGenerate" style="flex:1 1 auto;padding:10px 16px;">Generate Image</button>
+        <span id="generateStatus" class="generate-status hidden"></span>
+        <span id="queueBadge" class="queue-count-badge hidden">0</span>
+      </div>
+    </div>
+
+</main>
+
+  <div id="cropperModal" class="modal hidden">
+    <div class="modal-backdrop" id="cropperBackdrop"></div>
+    <div class="modal-content">
+      <div class="section-header" style="padding:14px 22px 0; margin-bottom:0; border-bottom:none;">100% View and Crop Image</div>
+      <div class="cropper-toolbar">
+        <div class="field">
+          <label>Aspect Ratio Constraint</label>
+          <select id="cropperAR">
+            <option value="">Unconstrained</option>
+            <option value="1:2.39">1:2.39</option>
+            <option value="9:21">9:21</option>
+            <option value="1:2">1:2</option>
+            <option value="1:1.85">1:1.85</option>
+            <option value="9:16">9:16</option>
+            <option value="10:16">10:16</option>
+            <option value="2:3">2:3</option>
+            <option value="3:4">3:4</option>
+            <option value="4:5">4:5</option>
+            <option value="1:1">1:1</option>
+            <option value="5:4">5:4</option>
+            <option value="4:3">4:3</option>
+            <option value="3:2">3:2</option>
+            <option value="16:10">16:10</option>
+            <option value="16:9">16:9</option>
+            <option value="1.85:1">1.85:1</option>
+            <option value="2:1">2:1</option>
+            <option value="21:9">21:9</option>
+            <option value="2.39:1">2.39:1</option>
+          </select>
+        </div>
+        <button class="btn secondary" id="btnCropperClose">Close</button>
+      </div>
+      <div class="cropper-scroll">
+        <div class="cropper-image-wrap" id="cropperWrap">
+          <img id="cropperImage" src="" alt="Full size output" style="display:block;">
+          <canvas id="cropperCanvas"></canvas>
+          <div id="cropperStats" class="cropper-stats hidden"></div>
+        </div>
+        <div id="cropperPreviewPanel" class="cropper-preview-block hidden">
+          <div class="section-header" style="margin-bottom:8px;">Preview Crop</div>
+          <canvas id="cropperPreviewCanvas"></canvas>
+          <div class="btn-row" style="margin-top:8px;">
+            <button class="btn primary" id="btnCopyCrop" title="Go to Settings tab and Ctrl+V to paste image, then switch to I2I. Adjust megapixels to scale to correct size.">Copy to Clipboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script type="module" src="/js/main.js?v=x54"></script>
+</body>
+</html>

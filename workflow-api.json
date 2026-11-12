@@ -1,0 +1,128 @@
+{
+  "prompt": {
+    "1": {
+      "class_type": "UNETLoader",
+      "inputs": {
+        "unet_name": "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    "2": {
+      "class_type": "CLIPLoader",
+      "inputs": {
+        "clip_name": "qwen3vl_4b_abliterated_fp8_scaled.safetensors",
+        "type": "krea2",
+        "device": "default"
+      }
+    },
+    "3": {
+      "class_type": "VAELoader",
+      "inputs": {
+        "vae_name": "qwen_image_vae.safetensors"
+      }
+    },
+    "5": {
+      "class_type": "HashTextClipboard",
+      "inputs": {
+        "use_clipboard": false,
+        "manual_text": "a red apple on a table"
+      }
+    },
+    "6": {
+      "class_type": "DoubleClipTextEncode",
+      "inputs": {
+        "clip": [
+          "2",
+          0
+        ],
+        "positive_prompt": [
+          "5",
+          0
+        ],
+        "negative_prompt": ""
+      }
+    },
+    "7": {
+      "class_type": "ConditioningZeroOut",
+      "inputs": {
+        "conditioning": [
+          "6",
+          1
+        ]
+      }
+    },
+    "8": {
+      "class_type": "EmptyLatentImage",
+      "inputs": {
+        "width": 832,
+        "height": 1664,
+        "batch_size": 1
+      }
+    },
+    "9": {
+      "class_type": "KSampler",
+      "inputs": {
+        "seed": 7,
+        "control_after_generate": "fixed",
+        "steps": 2,
+        "cfg": 1.0,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1.0,
+        "model": [
+          "1",
+          0
+        ],
+        "positive": [
+          "6",
+          0
+        ],
+        "negative": [
+          "7",
+          0
+        ],
+        "latent_image": [
+          "8",
+          0
+        ]
+      }
+    },
+    "10": {
+      "class_type": "VAEDecode",
+      "inputs": {
+        "samples": [
+          "9",
+          0
+        ],
+        "vae": [
+          "3",
+          0
+        ]
+      }
+    },
+    "11": {
+      "class_type": "SaveWithMetaData2",
+      "inputs": {
+        "images": [
+          "10",
+          0
+        ],
+        "filename_prefix": "20261112_a-red-apple-on-a-table",
+        "extension": "png",
+        "steps": 2,
+        "cfg": 1.0,
+        "modelname_string": "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "sampler_name_string": "euler",
+        "scheduler_string": "simple",
+        "positive": "a red apple on a table",
+        "negative": "",
+        "seed_value": 7,
+        "width": 832,
+        "height": 1664,
+        "lossless_webp": true,
+        "quality_jpeg_or_webp": 100,
+        "flnm_postfix": ""
+      }
+    }
+  }
+}

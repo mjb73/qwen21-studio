@@ -1,0 +1,310 @@
+{
+  "last_node_id": 12,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        160
+      ],
+      "size": [
+        320,
+        120
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        "qwen3vl_4b_abliterated_fp8_scaled.safetensors",
+        "krea2",
+        "default"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        320,
+        80
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        "qwen_image_vae.safetensors"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "HashTextClipboard",
+      "pos": [
+        420,
+        40
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "Text",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        false,
+        "a red apple on a table"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "DoubleClipTextEncode",
+      "pos": [
+        800,
+        40
+      ],
+      "size": [
+        340,
+        160
+      ],
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP"
+        },
+        {
+          "name": "positive_prompt",
+          "type": "STRING"
+        },
+        {
+          "name": "negative_prompt",
+          "type": "STRING"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Positive Conditioning",
+          "type": "CONDITIONING"
+        },
+        {
+          "name": "Negative Conditioning",
+          "type": "CONDITIONING"
+        },
+        {
+          "name": "Positive Prompt",
+          "type": "STRING"
+        },
+        {
+          "name": "Negative Prompt",
+          "type": "STRING"
+        }
+      ],
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        1180,
+        40
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING"
+        }
+      ],
+      "widgets_values": []
+    },
+    {
+      "id": 8,
+      "type": "EmptyLatentImage",
+      "pos": [
+        420,
+        300
+      ],
+      "size": [
+        320,
+        100
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        832,
+        1664,
+        1
+      ]
+    },
+    {
+      "id": 9,
+      "type": "KSampler",
+      "pos": [
+        800,
+        300
+      ],
+      "size": [
+        340,
+        340
+      ],
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL"
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING"
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING"
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT"
+        }
+      ],
+      "widgets_values": [
+        7,
+        "fixed",
+        2,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ]
+    },
+    {
+      "id": 10,
+      "type": "VAEDecode",
+      "pos": [
+        1180,
+        300
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT"
+        },
+        {
+          "name": "vae",
+          "type": "VAE"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE"
+        }
+      ],
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "SaveWithMetaData2",
+      "pos": [
+        1500,
+        300
+      ],
+      "size": [
+        360,
+        340
+      ],
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE"
+        }
+      ],
+      "outputs": [],
+      "widgets_values": [
+        "20261112_a-red-apple-on-a-table",
+        "png",
+        2,
+        1.0,
+        "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "euler",
+        "simple",
+        "a red apple on a table",
+        "",
+        7,
+        832,
+        1664,
+        true,
+        100,
+        ""
+      ]
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "version": 0.4
+}
