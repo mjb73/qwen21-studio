@@ -22,7 +22,7 @@
         }
       ],
       "widgets_values": [
-        "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "krea2_turbo_fp8_scaled.safetensors",
         "default"
       ]
     },
@@ -46,7 +46,7 @@
         }
       ],
       "widgets_values": [
-        "qwen3vl_4b_abliterated_fp8_scaled.safetensors",
+        "qwen3vl_4b_fp8_scaled.safetensors",
         "krea2",
         "default"
       ]
@@ -75,6 +75,80 @@
       ]
     },
     {
+      "id": 4,
+      "type": "LoraLoader",
+      "pos": [
+        40,
+        440
+      ],
+      "size": [
+        320,
+        160
+      ],
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL"
+        },
+        {
+          "name": "clip",
+          "type": "CLIP"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL"
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP"
+        }
+      ],
+      "widgets_values": [
+        "Krea2_lora_GTA_VI.safetensors",
+        0.3,
+        0.3
+      ]
+    },
+    {
+      "id": 12,
+      "type": "LoraLoader",
+      "pos": [
+        40,
+        620
+      ],
+      "size": [
+        320,
+        160
+      ],
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL"
+        },
+        {
+          "name": "clip",
+          "type": "CLIP"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL"
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP"
+        }
+      ],
+      "widgets_values": [
+        "Krea2Izayoi_T1_175205_2465step.safetensors",
+        0.6,
+        0.6
+      ]
+    },
+    {
       "id": 5,
       "type": "HashTextClipboard",
       "pos": [
@@ -95,7 +169,7 @@
       ],
       "widgets_values": [
         false,
-        "a red apple on a table"
+        "glamorous concept art of a 21 year old woman in a little black dress"
       ]
     },
     {
@@ -188,8 +262,8 @@
         }
       ],
       "widgets_values": [
-        832,
-        1664,
+        960,
+        1472,
         1
       ]
     },
@@ -229,9 +303,9 @@
         }
       ],
       "widgets_values": [
-        7,
+        42,
         "fixed",
-        2,
+        8,
         1.0,
         "euler",
         "simple",
@@ -286,18 +360,18 @@
       ],
       "outputs": [],
       "widgets_values": [
-        "20261112_a-red-apple-on-a-table",
+        "20261113_glamorous-concept-art-of-a-21-year-old-w",
         "png",
-        2,
+        8,
         1.0,
-        "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "krea2_turbo_fp8_scaled.safetensors",
         "euler",
         "simple",
-        "a red apple on a table",
+        "glamorous concept art of a 21 year old woman in a little black dress",
         "",
-        7,
-        832,
-        1664,
+        42,
+        960,
+        1472,
         true,
         100,
         ""

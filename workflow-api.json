@@ -3,14 +3,14 @@
     "1": {
       "class_type": "UNETLoader",
       "inputs": {
-        "unet_name": "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "unet_name": "krea2_turbo_fp8_scaled.safetensors",
         "weight_dtype": "default"
       }
     },
     "2": {
       "class_type": "CLIPLoader",
       "inputs": {
-        "clip_name": "qwen3vl_4b_abliterated_fp8_scaled.safetensors",
+        "clip_name": "qwen3vl_4b_fp8_scaled.safetensors",
         "type": "krea2",
         "device": "default"
       }
@@ -25,15 +25,47 @@
       "class_type": "HashTextClipboard",
       "inputs": {
         "use_clipboard": false,
-        "manual_text": "a red apple on a table"
+        "manual_text": "glamorous concept art of a 21 year old woman in a little black dress"
+      }
+    },
+    "4": {
+      "class_type": "LoraLoader",
+      "inputs": {
+        "lora_name": "Krea2_lora_GTA_VI.safetensors",
+        "strength_model": 0.3,
+        "strength_clip": 0.3,
+        "model": [
+          "1",
+          0
+        ],
+        "clip": [
+          "2",
+          0
+        ]
+      }
+    },
+    "12": {
+      "class_type": "LoraLoader",
+      "inputs": {
+        "lora_name": "Krea2Izayoi_T1_175205_2465step.safetensors",
+        "strength_model": 0.6,
+        "strength_clip": 0.6,
+        "model": [
+          "4",
+          0
+        ],
+        "clip": [
+          "4",
+          1
+        ]
       }
     },
     "6": {
       "class_type": "DoubleClipTextEncode",
       "inputs": {
         "clip": [
-          "2",
-          0
+          "12",
+          1
         ],
         "positive_prompt": [
           "5",
@@ -54,23 +86,23 @@
     "8": {
       "class_type": "EmptyLatentImage",
       "inputs": {
-        "width": 832,
-        "height": 1664,
+        "width": 960,
+        "height": 1472,
         "batch_size": 1
       }
     },
     "9": {
       "class_type": "KSampler",
       "inputs": {
-        "seed": 7,
+        "seed": 42,
         "control_after_generate": "fixed",
-        "steps": 2,
+        "steps": 8,
         "cfg": 1.0,
         "sampler_name": "euler",
         "scheduler": "simple",
         "denoise": 1.0,
         "model": [
-          "1",
+          "12",
           0
         ],
         "positive": [
@@ -107,18 +139,18 @@
           "10",
           0
         ],
-        "filename_prefix": "20261112_a-red-apple-on-a-table",
+        "filename_prefix": "20261113_glamorous-concept-art-of-a-21-year-old-w",
         "extension": "png",
-        "steps": 2,
+        "steps": 8,
         "cfg": 1.0,
-        "modelname_string": "moody_krea2_mix_v4.1G_fp8.safetensors",
+        "modelname_string": "krea2_turbo_fp8_scaled.safetensors",
         "sampler_name_string": "euler",
         "scheduler_string": "simple",
-        "positive": "a red apple on a table",
+        "positive": "glamorous concept art of a 21 year old woman in a little black dress",
         "negative": "",
-        "seed_value": 7,
-        "width": 832,
-        "height": 1664,
+        "seed_value": 42,
+        "width": 960,
+        "height": 1472,
         "lossless_webp": true,
         "quality_jpeg_or_webp": 100,
         "flnm_postfix": ""
