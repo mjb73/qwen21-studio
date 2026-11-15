@@ -1,5 +1,5 @@
 {
-  "last_node_id": 12,
+  "last_node_id": 13,
   "last_link_id": 0,
   "nodes": [
     {
@@ -22,7 +22,7 @@
         }
       ],
       "widgets_values": [
-        "krea2_turbo_fp8_scaled.safetensors",
+        "qwen_image_2.1_int8_convrot.safetensors",
         "default"
       ]
     },
@@ -46,8 +46,8 @@
         }
       ],
       "widgets_values": [
-        "qwen3vl_4b_fp8_scaled.safetensors",
-        "krea2",
+        "qwen3vl_8b_int8_convrot.safetensors",
+        "qwen_image",
         "default"
       ]
     },
@@ -71,7 +71,7 @@
         }
       ],
       "widgets_values": [
-        "qwen_image_vae.safetensors"
+        "qwen_image_2.1_vae_bf16.safetensors"
       ]
     },
     {
@@ -106,46 +106,9 @@
         }
       ],
       "widgets_values": [
-        "Krea2_lora_GTA_VI.safetensors",
-        0.3,
-        0.3
-      ]
-    },
-    {
-      "id": 12,
-      "type": "LoraLoader",
-      "pos": [
-        40,
-        620
-      ],
-      "size": [
-        320,
-        160
-      ],
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL"
-        },
-        {
-          "name": "clip",
-          "type": "CLIP"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL"
-        },
-        {
-          "name": "CLIP",
-          "type": "CLIP"
-        }
-      ],
-      "widgets_values": [
-        "Krea2Izayoi_T1_175205_2465step.safetensors",
-        0.6,
-        0.6
+        "qwen/Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors",
+        0.0,
+        0.0
       ]
     },
     {
@@ -169,12 +132,12 @@
       ],
       "widgets_values": [
         false,
-        "glamorous concept art of a 21 year old woman in a little black dress"
+        "A woman in her late twenties, wearing a Powder-blue round-neck knit tank paired with a small-scale blue-and-cream houndstooth mini skirt, completed by espadrille flats."
       ]
     },
     {
       "id": 6,
-      "type": "DoubleClipTextEncode",
+      "type": "TextEncodeQwenImage21",
       "pos": [
         800,
         40
@@ -244,7 +207,7 @@
     },
     {
       "id": 8,
-      "type": "EmptyLatentImage",
+      "type": "LoadImage",
       "pos": [
         420,
         300
@@ -256,16 +219,44 @@
       "inputs": [],
       "outputs": [
         {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        "i2i_input_20261114_183951_384125_resized_185737_433876.png"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "VAEEncode",
+      "pos": [
+        420,
+        420
+      ],
+      "size": [
+        320,
+        80
+      ],
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE"
+        },
+        {
+          "name": "vae",
+          "type": "VAE"
+        }
+      ],
+      "outputs": [
+        {
           "name": "LATENT",
           "type": "LATENT",
           "links": []
         }
       ],
-      "widgets_values": [
-        960,
-        1472,
-        1
-      ]
+      "widgets_values": []
     },
     {
       "id": 9,
@@ -305,7 +296,7 @@
       "widgets_values": [
         42,
         "fixed",
-        8,
+        25,
         1.0,
         "euler",
         "simple",
@@ -360,14 +351,14 @@
       ],
       "outputs": [],
       "widgets_values": [
-        "20261113_glamorous-concept-art-of-a-21-year-old-w",
+        "20261114_A-woman-in-her-late-twenties-wearing-a-P",
         "png",
-        8,
+        25,
         1.0,
-        "krea2_turbo_fp8_scaled.safetensors",
+        "qwen_image_2.1_int8_convrot.safetensors",
         "euler",
         "simple",
-        "glamorous concept art of a 21 year old woman in a little black dress",
+        "A woman in her late twenties, wearing a Powder-blue round-neck knit tank paired with a small-scale blue-and-cream houndstooth mini skirt, completed by espadrille flats.",
         "",
         42,
         960,

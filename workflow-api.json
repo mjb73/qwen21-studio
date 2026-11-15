@@ -3,37 +3,37 @@
     "1": {
       "class_type": "UNETLoader",
       "inputs": {
-        "unet_name": "krea2_turbo_fp8_scaled.safetensors",
+        "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
         "weight_dtype": "default"
       }
     },
     "2": {
       "class_type": "CLIPLoader",
       "inputs": {
-        "clip_name": "qwen3vl_4b_fp8_scaled.safetensors",
-        "type": "krea2",
+        "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+        "type": "qwen_image",
         "device": "default"
       }
     },
     "3": {
       "class_type": "VAELoader",
       "inputs": {
-        "vae_name": "qwen_image_vae.safetensors"
+        "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
       }
     },
     "5": {
       "class_type": "HashTextClipboard",
       "inputs": {
         "use_clipboard": false,
-        "manual_text": "glamorous concept art of a 21 year old woman in a little black dress"
+        "manual_text": "A woman in her late twenties, wearing a Powder-blue round-neck knit tank paired with a small-scale blue-and-cream houndstooth mini skirt, completed by espadrille flats."
       }
     },
     "4": {
       "class_type": "LoraLoader",
       "inputs": {
-        "lora_name": "Krea2_lora_GTA_VI.safetensors",
-        "strength_model": 0.3,
-        "strength_clip": 0.3,
+        "lora_name": "qwen/Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors",
+        "strength_model": 0.0,
+        "strength_clip": 0.0,
         "model": [
           "1",
           0
@@ -44,51 +44,44 @@
         ]
       }
     },
-    "12": {
-      "class_type": "LoraLoader",
+    "8": {
+      "class_type": "LoadImage",
       "inputs": {
-        "lora_name": "Krea2Izayoi_T1_175205_2465step.safetensors",
-        "strength_model": 0.6,
-        "strength_clip": 0.6,
+        "image": "i2i_input_20261114_183951_384125_resized_185737_433876.png"
+      }
+    },
+    "6": {
+      "class_type": "TextEncodeQwenImage21",
+      "inputs": {
+        "clip": [
+          "4",
+          1
+        ],
+        "prompt": [
+          "5",
+          0
+        ],
+        "negative_prompt": "",
+        "resolution": 0,
+        "vae": [
+          "3",
+          0
+        ],
+        "images.image_1": [
+          "8",
+          0
+        ]
+      }
+    },
+    "16": {
+      "class_type": "QwenImage21Cache",
+      "inputs": {
         "model": [
           "4",
           0
         ],
-        "clip": [
-          "4",
-          1
-        ]
-      }
-    },
-    "6": {
-      "class_type": "DoubleClipTextEncode",
-      "inputs": {
-        "clip": [
-          "12",
-          1
-        ],
-        "positive_prompt": [
-          "5",
-          0
-        ],
-        "negative_prompt": ""
-      }
-    },
-    "7": {
-      "class_type": "ConditioningZeroOut",
-      "inputs": {
-        "conditioning": [
-          "6",
-          1
-        ]
-      }
-    },
-    "8": {
-      "class_type": "EmptyLatentImage",
-      "inputs": {
-        "width": 960,
-        "height": 1472,
-        "batch_size": 1
+        "device": "auto",
+        "dtype": "default"
       }
     },
     "9": {
@@ -96,13 +89,13 @@
       "inputs": {
         "seed": 42,
         "control_after_generate": "fixed",
-        "steps": 8,
+        "steps": 25,
         "cfg": 1.0,
         "sampler_name": "euler",
         "scheduler": "simple",
         "denoise": 1.0,
         "model": [
-          "12",
+          "16",
           0
         ],
         "positive": [
@@ -110,12 +103,12 @@
           0
         ],
         "negative": [
-          "7",
-          0
+          "6",
+          1
         ],
         "latent_image": [
-          "8",
-          0
+          "6",
+          2
         ]
       }
     },
@@ -139,14 +132,14 @@
           "10",
           0
         ],
-        "filename_prefix": "20261113_glamorous-concept-art-of-a-21-year-old-w",
+        "filename_prefix": "20261114_A-woman-in-her-late-twenties-wearing-a-P",
         "extension": "png",
-        "steps": 8,
+        "steps": 25,
         "cfg": 1.0,
-        "modelname_string": "krea2_turbo_fp8_scaled.safetensors",
+        "modelname_string": "qwen_image_2.1_int8_convrot.safetensors",
         "sampler_name_string": "euler",
         "scheduler_string": "simple",
-        "positive": "glamorous concept art of a 21 year old woman in a little black dress",
+        "positive": "A woman in her late twenties, wearing a Powder-blue round-neck knit tank paired with a small-scale blue-and-cream houndstooth mini skirt, completed by espadrille flats.",
         "negative": "",
         "seed_value": 42,
         "width": 960,
