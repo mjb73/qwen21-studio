@@ -3,37 +3,37 @@
     "1": {
       "class_type": "UNETLoader",
       "inputs": {
-        "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+        "unet_name": "krea2_turbo_fp8_scaled.safetensors",
         "weight_dtype": "default"
       }
     },
     "2": {
       "class_type": "CLIPLoader",
       "inputs": {
-        "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
-        "type": "qwen_image",
+        "clip_name": "qwen3vl_4b_fp8_scaled.safetensors",
+        "type": "krea2",
         "device": "default"
       }
     },
     "3": {
       "class_type": "VAELoader",
       "inputs": {
-        "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+        "vae_name": "qwen_image_vae.safetensors"
       }
     },
     "5": {
       "class_type": "HashTextClipboard",
       "inputs": {
         "use_clipboard": false,
-        "manual_text": "A woman in her late twenties, wearing a Powder-blue round-neck knit tank paired with a small-scale blue-and-cream houndstooth mini skirt, completed by espadrille flats."
+        "manual_text": "adopt the character from <image 1>. Full-body back: Poppy, with her fair, pink-toned skin and copper-red hair in a shoulder-length, bouncy curls style with a side part, stands professionally in a highly detailed digital artwork. Her clear green eyes, featuring pale golden flecks, are accentuated with mascara and subtle eye makeup. She wears a dusty rose lace bra with scalloped edges and a matching dusty rose lace panty, both worn alone, and her bare feet are visible. The camera captures her full-body back, showcasing her luxurious and extravagant outfit. The scene is the scene is a glamorous photo of concept art, rendered as a breathtaking digital painting with a soft airbrushed effect. The palette is cold and desaturated, bathed in diffuse overcast light. The full-body shot captures every detail with high fashion and luxurious elegance, emphasizing the opulent and sensual nature of the subject."
       }
     },
     "4": {
       "class_type": "LoraLoader",
       "inputs": {
-        "lora_name": "qwen/Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors",
-        "strength_model": 0.0,
-        "strength_clip": 0.0,
+        "lora_name": "Krea2Izayoi_T1_175205_2465step.safetensors",
+        "strength_model": 0.6,
+        "strength_clip": 0.6,
         "model": [
           "1",
           0
@@ -44,44 +44,51 @@
         ]
       }
     },
-    "8": {
-      "class_type": "LoadImage",
+    "12": {
+      "class_type": "LoraLoader",
       "inputs": {
-        "image": "i2i_input_20261114_183951_384125_resized_185737_433876.png"
-      }
-    },
-    "6": {
-      "class_type": "TextEncodeQwenImage21",
-      "inputs": {
-        "clip": [
-          "4",
-          1
-        ],
-        "prompt": [
-          "5",
-          0
-        ],
-        "negative_prompt": "",
-        "resolution": 0,
-        "vae": [
-          "3",
-          0
-        ],
-        "images.image_1": [
-          "8",
-          0
-        ]
-      }
-    },
-    "16": {
-      "class_type": "QwenImage21Cache",
-      "inputs": {
+        "lora_name": "RapunzelsTangledAdventure_K2_0.16.safetensors",
+        "strength_model": 0.4,
+        "strength_clip": 0.4,
         "model": [
           "4",
           0
         ],
-        "device": "auto",
-        "dtype": "default"
+        "clip": [
+          "4",
+          1
+        ]
+      }
+    },
+    "6": {
+      "class_type": "DoubleClipTextEncode",
+      "inputs": {
+        "clip": [
+          "12",
+          1
+        ],
+        "positive_prompt": [
+          "5",
+          0
+        ],
+        "negative_prompt": ""
+      }
+    },
+    "7": {
+      "class_type": "ConditioningZeroOut",
+      "inputs": {
+        "conditioning": [
+          "6",
+          1
+        ]
+      }
+    },
+    "8": {
+      "class_type": "EmptyLatentImage",
+      "inputs": {
+        "width": 896,
+        "height": 1600,
+        "batch_size": 1
       }
     },
     "9": {
@@ -89,13 +96,13 @@
       "inputs": {
         "seed": 42,
         "control_after_generate": "fixed",
-        "steps": 25,
+        "steps": 8,
         "cfg": 1.0,
         "sampler_name": "euler",
         "scheduler": "simple",
         "denoise": 1.0,
         "model": [
-          "16",
+          "12",
           0
         ],
         "positive": [
@@ -103,12 +110,12 @@
           0
         ],
         "negative": [
-          "6",
-          1
+          "7",
+          0
         ],
         "latent_image": [
-          "6",
-          2
+          "8",
+          0
         ]
       }
     },
@@ -132,18 +139,18 @@
           "10",
           0
         ],
-        "filename_prefix": "20261114_A-woman-in-her-late-twenties-wearing-a-P",
+        "filename_prefix": "20261116_adopt-the-character-from-image-1-Full-bo",
         "extension": "png",
-        "steps": 25,
+        "steps": 8,
         "cfg": 1.0,
-        "modelname_string": "qwen_image_2.1_int8_convrot.safetensors",
+        "modelname_string": "krea2_turbo_fp8_scaled.safetensors",
         "sampler_name_string": "euler",
         "scheduler_string": "simple",
-        "positive": "A woman in her late twenties, wearing a Powder-blue round-neck knit tank paired with a small-scale blue-and-cream houndstooth mini skirt, completed by espadrille flats.",
+        "positive": "adopt the character from <image 1>. Full-body back: Poppy, with her fair, pink-toned skin and copper-red hair in a shoulder-length, bouncy curls style with a side part, stands professionally in a highly detailed digital artwork. Her clear green eyes, featuring pale golden flecks, are accentuated with mascara and subtle eye makeup. She wears a dusty rose lace bra with scalloped edges and a matching dusty rose lace panty, both worn alone, and her bare feet are visible. The camera captures her full-body back, showcasing her luxurious and extravagant outfit. The scene is the scene is a glamorous photo of concept art, rendered as a breathtaking digital painting with a soft airbrushed effect. The palette is cold and desaturated, bathed in diffuse overcast light. The full-body shot captures every detail with high fashion and luxurious elegance, emphasizing the opulent and sensual nature of the subject.",
         "negative": "",
         "seed_value": 42,
-        "width": 960,
-        "height": 1472,
+        "width": 896,
+        "height": 1600,
         "lossless_webp": true,
         "quality_jpeg_or_webp": 100,
         "flnm_postfix": ""
