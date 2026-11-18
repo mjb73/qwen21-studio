@@ -25,15 +25,15 @@
       "class_type": "HashTextClipboard",
       "inputs": {
         "use_clipboard": false,
-        "manual_text": "adopt the character from <image 1>. Full-body back: Poppy, with her fair, pink-toned skin and copper-red hair in a shoulder-length, bouncy curls style with a side part, stands professionally in a highly detailed digital artwork. Her clear green eyes, featuring pale golden flecks, are accentuated with mascara and subtle eye makeup. She wears a dusty rose lace bra with scalloped edges and a matching dusty rose lace panty, both worn alone, and her bare feet are visible. The camera captures her full-body back, showcasing her luxurious and extravagant outfit. The scene is the scene is a glamorous photo of concept art, rendered as a breathtaking digital painting with a soft airbrushed effect. The palette is cold and desaturated, bathed in diffuse overcast light. The full-body shot captures every detail with high fashion and luxurious elegance, emphasizing the opulent and sensual nature of the subject."
+        "manual_text": "violet variety hour: a vibrant, artistic lifestyle news set with purple and magenta tones, close-up, woman wearing Tailored blazer and silk blouse., Brigitte, European, fair, neutral undertones skin tone with dirty blonde hair in a tousled, textured style with face-framing curtain bangs. Eyes: muted warm brown with subtle golden flecks., head level, direct gaze, shoulders square, mascara, eye makeup, subtle lipstick,head level, direct gaze, shoulders square, professional digital artwork, illustrative, painterly, matte painting, high fashion, opulent, high contrast, detailed, concept art, digital painting, soft airbrushed, cold desaturated palette, diffuse overcast light, 21 year old, medium sized breasts, cleavage."
       }
     },
     "4": {
       "class_type": "LoraLoader",
       "inputs": {
         "lora_name": "Krea2Izayoi_T1_175205_2465step.safetensors",
-        "strength_model": 0.6,
-        "strength_clip": 0.6,
+        "strength_model": 0.0,
+        "strength_clip": 0.0,
         "model": [
           "1",
           0
@@ -48,8 +48,8 @@
       "class_type": "LoraLoader",
       "inputs": {
         "lora_name": "RapunzelsTangledAdventure_K2_0.16.safetensors",
-        "strength_model": 0.4,
-        "strength_clip": 0.4,
+        "strength_model": 0.0,
+        "strength_clip": 0.0,
         "model": [
           "4",
           0
@@ -86,8 +86,8 @@
     "8": {
       "class_type": "EmptyLatentImage",
       "inputs": {
-        "width": 896,
-        "height": 1600,
+        "width": 1472,
+        "height": 960,
         "batch_size": 1
       }
     },
@@ -139,18 +139,18 @@
           "10",
           0
         ],
-        "filename_prefix": "20261116_adopt-the-character-from-image-1-Full-bo",
+        "filename_prefix": "20261117_violet-variety-hour-a-vibrant-artistic-l",
         "extension": "png",
         "steps": 8,
         "cfg": 1.0,
         "modelname_string": "krea2_turbo_fp8_scaled.safetensors",
         "sampler_name_string": "euler",
         "scheduler_string": "simple",
-        "positive": "adopt the character from <image 1>. Full-body back: Poppy, with her fair, pink-toned skin and copper-red hair in a shoulder-length, bouncy curls style with a side part, stands professionally in a highly detailed digital artwork. Her clear green eyes, featuring pale golden flecks, are accentuated with mascara and subtle eye makeup. She wears a dusty rose lace bra with scalloped edges and a matching dusty rose lace panty, both worn alone, and her bare feet are visible. The camera captures her full-body back, showcasing her luxurious and extravagant outfit. The scene is the scene is a glamorous photo of concept art, rendered as a breathtaking digital painting with a soft airbrushed effect. The palette is cold and desaturated, bathed in diffuse overcast light. The full-body shot captures every detail with high fashion and luxurious elegance, emphasizing the opulent and sensual nature of the subject.",
+        "positive": "violet variety hour: a vibrant, artistic lifestyle news set with purple and magenta tones, close-up, woman wearing Tailored blazer and silk blouse., Brigitte, European, fair, neutral undertones skin tone with dirty blonde hair in a tousled, textured style with face-framing curtain bangs. Eyes: muted warm brown with subtle golden flecks., head level, direct gaze, shoulders square, mascara, eye makeup, subtle lipstick,head level, direct gaze, shoulders square, professional digital artwork, illustrative, painterly, matte painting, high fashion, opulent, high contrast, detailed, concept art, digital painting, soft airbrushed, cold desaturated palette, diffuse overcast light, 21 year old, medium sized breasts, cleavage.",
         "negative": "",
         "seed_value": 42,
-        "width": 896,
-        "height": 1600,
+        "width": 1472,
+        "height": 960,
         "lossless_webp": true,
         "quality_jpeg_or_webp": 100,
         "flnm_postfix": ""
